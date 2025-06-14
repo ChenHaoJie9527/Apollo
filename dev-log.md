@@ -25,11 +25,16 @@ Apollo 是一个基于原生Fetch，用于简化和增强前端数据请求的�
 - [ ] 支持插件机制
 - [ ] 支持 SSR 场景
 
-### Task 小功能
+### Task 进行中的功能
 
-- [ ] 创建 Apollo 函数
-- [ ] 合并选项
-- [ ] 返回增强型Fetch函数
+- [ ] 创建 Apollo 工厂函数
+  - [ ] 入参：fetch，optionsFunction
+  - [ ] 使用范型设计函数的签名
+    - [x] 定义MinFetchFn基本fetch函数类型
+  - [ ] 校验fetch
+  - [ ] 生成options
+  - [ ] 合并选项
+  - [ ] 返回增强型Fetch函数
 
 ## 开发日志
 
