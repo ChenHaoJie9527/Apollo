@@ -28,9 +28,10 @@ Apollo 是一个基于原生Fetch，用于简化和增强前端数据请求的�
 ### Task 进行中的功能
 
 - [ ] 创建 Apollo 工厂函数
-  - [x] 入参：fetch，optionsFunction
-  - [ ] 使用范型设计函数的签名
-    - [x] 定义MinFetchFn基本fetch函数类型
+  - [x] 定义函数的第一个参数T类型
+    - [x] 定义T类型是MinFetchFn基本fetch函数类型
+  - [x] 定义函数第二个参数K类型
+    - [ ] 定义K类型是DefaultOptions集合类型
   - [ ] 校验fetch
   - [ ] 生成options
   - [ ] 合并选项
