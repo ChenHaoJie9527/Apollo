@@ -28,13 +28,18 @@ Apollo 是一个基于原生Fetch，用于简化和增强前端数据请求的�
 ### Task 进行中的功能
 
 - [ ] 创建 Apollo 工厂函数
-  - [ ] 入参：fetch，optionsFunction
+  - [x] 入参：fetch，optionsFunction
   - [ ] 使用范型设计函数的签名
     - [x] 定义MinFetchFn基本fetch函数类型
   - [ ] 校验fetch
   - [ ] 生成options
   - [ ] 合并选项
   - [ ] 返回增强型Fetch函数
+
+### Test 测试
+
+- [x] 校验apollo是否存在
+- [x] 校验能否正常接收 fetch
 
 ## 开发日志
 
