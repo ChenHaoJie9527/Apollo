@@ -1,0 +1,22 @@
+{
+  "name": "apollo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "lint": "biome check --write && tsc --noEmit",
+    "build": "tsup",
+    "test": "vitest run && pnpm run lint"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "@standard-schema/spec": "^1.0.0",
+    "@types/node": "^24.0.1",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.3"
+  }
+}

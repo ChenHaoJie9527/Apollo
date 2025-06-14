@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+     "allowSyntheticDefaultImports": true, // To provide backwards compatibility, Node.js allows you to import most CommonJS packages with a default import. This flag tells TypeScript that it's okay to use import on CommonJS modules. (credits @sindresorhus/tsconfig https://github.com/sindresorhus/tsconfig)
+     "baseUrl": ".",
+     "declaration": true,
+     "esModuleInterop": true,
+     "forceConsistentCasingInFileNames": true,
+     "inlineSources": true,
+     "isolatedModules": false,
+     "module": "ES2020",
+     "moduleDetection": "force",
+     "moduleResolution": "Bundler",
+     "newLine": "lf",
+     "noEmitOnError": true,
+     "noFallthroughCasesInSwitch": true,
+     "noImplicitOverride": true,
+     "noImplicitReturns": true,
+     "noPropertyAccessFromIndexSignature": false,
+     "noUncheckedIndexedAccess": true,
+     "noUnusedLocals": true,
+     "paths": { "src/*": ["./src/*"] },
+     "pretty": true,
+     "skipLibCheck": true,
+     "sourceMap": true,
+     "strict": true,
+     "stripInternal": true,
+     "target": "ES2020",
+     "verbatimModuleSyntax": true,
+  },
+  "include": ["src", "vitest.config.ts", "tsup.config.ts", "tsconfig.json"],
+  "exclude": ["./dist"]
+}

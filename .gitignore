@@ -1,0 +1,9 @@
+/node_modules
+/.vscode
+/dist
+tsconfig.vitest-temp.json
+__*
+/articles
+todo.*
+PR.md
+TEMP.md
