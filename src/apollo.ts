@@ -3,7 +3,11 @@ import type {
   DefaultOptions,
   DefaultRawBody,
   FetcherOptions,
+  MaybePromise
 } from "./types";
+
+
+const emptyOptions = {} as any
 
 export const apollo = <
   const TFetch extends MinFetchFn,
@@ -18,7 +22,7 @@ export const apollo = <
     input: Parameters<TFetch>[0],
     fetchOpts: FetcherOptions<TFetch, any, any, any>,
     ctx?: Parameters<TFetch>[2]
-  ) => void
+  ) => MaybePromise<TDefaultOptions> = () => emptyOptions
 ) => {
   return {
     get: (url: string) => {
