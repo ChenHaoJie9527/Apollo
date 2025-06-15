@@ -1,0 +1,1 @@
+export type SerializeBody<T> = (body: T) => BodyInit | null | undefined;

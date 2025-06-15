@@ -1,5 +1,9 @@
-import type { MinFetchFn, DefaultOptions, DefaultRawBody } from "./types";
-
+import type {
+  MinFetchFn,
+  DefaultOptions,
+  DefaultRawBody,
+  FetcherOptions,
+} from "./types";
 
 export const apollo = <
   const TFetch extends MinFetchFn,
@@ -10,7 +14,11 @@ export const apollo = <
   > = DefaultOptions<TFetch, any, DefaultRawBody>
 >(
   fetch: TFetch,
-  createOptionsFunction: () => void
+  getDefaultOptions: (
+    input: Parameters<TFetch>[0],
+    fetchOpts: FetcherOptions<TFetch, any, any, any>,
+    ctx?: Parameters<TFetch>[2]
+  ) => void
 ) => {
   return {
     get: (url: string) => {

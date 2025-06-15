@@ -1,28 +1,9 @@
 import type { BaseOptions } from "./BaseOptions";
-import type { MaybePromise } from "./MaybePromise";
+import type { HeadersObject } from "./HeadersObject";
+import type { Method } from "./Method";
 import type { MinFetchFn } from "./MinFetchFn";
-
-type Method =
-  | "GET"
-  | "POST"
-  | "PUT"
-  | "DELETE"
-  | "PATCH"
-  | "OPTIONS"
-  | "HEAD"
-  | "CONNECT"
-  | "TRACE"
-  | (string & {});
-
-type HeadersObject = Record<string, string | number | undefined | null>;
-
-
-type ParseResponse<T> = (
-  response: Response,
-  request: Request
-) => MaybePromise<T>;
-
-type SerializeBody<T> = (body: T) => BodyInit | null | undefined;
+import type { ParseResponse } from "./ParseResponse";
+import type { SerializeBody } from "./SerializeBody";
 
 /**
  * 客户端的默认配置选项
