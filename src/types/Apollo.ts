@@ -3,6 +3,7 @@ import type { DefaultOptions } from "./DefaultOptions";
 import { FetcherOptions } from "./FetcherOptions";
 import { StandardSchemaV1 } from "@standard-schema/spec";
 import { GetDefaultParsedData } from "./GetDefaultParsedData";
+import { GetDefaultRawBody } from "./GetDefaultRawBody";
 
 export type Apollo<
   TFetch extends MinFetchFn = typeof fetch,
@@ -17,9 +18,9 @@ export type Apollo<
     TParseData,
     any
   >,
-  TRawBody = DefaultRawBody<TDefaultOptions>
+  TRawBody = GetDefaultRawBody<TDefaultOptions>
 >(
   input: Parameters<TFetch>[0],
-  fetchOpts: FetcherOptions<TFetch, any, any, any>,
+  fetchOpts: FetcherOptions<TFetch, TSchema, TParseData, TRawBody>,
   ctx?: Parameters<TFetch>[2]
-) => Promise<void>;
+) => Promise<StandardSchemaV1.InferOutput<TSchema>>;

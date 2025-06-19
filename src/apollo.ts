@@ -4,6 +4,7 @@ import type {
 	FetcherOptions,
 	MaybePromise,
 	MinFetchFn,
+	Apollo
 } from "./types";
 
 const emptyOptions = {} as any;
@@ -22,7 +23,7 @@ export const apollo = <
 		fetchOpts: FetcherOptions<TFetch, any, any, any>,
 		ctx?: Parameters<TFetch>[2],
 	) => MaybePromise<TDefaultOptions> = () => emptyOptions,
-) => {
+): Apollo<TFetch, TDefaultOptions> => {
 
 	return async (input, fetchOpts, ctx) => {
 
