@@ -1,5 +1,5 @@
-import type { MinFetchFn } from "./MinFetchFn";
 import type { DistributiveOmit } from "./DistributiveOmit";
+import type { MinFetchFn } from "./MinFetchFn";
 
 /**
  * BaseOptions 是工具类型，用于从MinFetchFn的第二个参数options中，移除body、headers、method属性，并返回剩余的类型
@@ -10,8 +10,8 @@ import type { DistributiveOmit } from "./DistributiveOmit";
  * & {}：用于添加一个空对象类型，表示剩余的类型必须是一个对象
  */
 export type BaseOptions<T extends MinFetchFn> = DistributiveOmit<
-  NonNullable<Parameters<T>>[1],
-  "body" | "headers" | "method"
+	NonNullable<Parameters<T>>[1],
+	"body" | "headers" | "method"
 > & {};
 
 //示例:
@@ -19,10 +19,10 @@ type MinFetchFn1 = (url: string, options: RequestInit) => Promise<Response>;
 type BaseOptions1 = Omit<RequestInit, "body" | "headers" | "method"> & {};
 
 const a: BaseOptions1 = {
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: {},
-  //   method: "GET",
-  // 不包含以上3种属性
+	//   headers: {
+	//     "Content-Type": "application/json",
+	//   },
+	//   body: {},
+	//   method: "GET",
+	// 不包含以上3种属性
 };

@@ -1,5 +1,5 @@
-import type { JsonObject } from "./JsonObject";
 import type { JsonArray } from "./JsonArray";
+import type { JsonObject } from "./JsonObject";
 
 /**
  * TDefaultOptions 是一个联合类型，标识默认的请求体类型，可以是BodyInit类型，也可以是JsonObject类型

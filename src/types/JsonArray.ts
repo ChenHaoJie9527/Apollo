@@ -8,5 +8,5 @@ import type { JsonPrimitive } from "./JsonPrimitive";
  * ReadonlyArray: 表示只读数组类型，是Array的子集，表示数组是只读的
  */
 export type JsonArray = Array<
-  JsonObject | Array<any> | JsonPrimitive | ReadonlyArray<any>
+	JsonObject | Array<any> | JsonPrimitive | ReadonlyArray<any>
 >;

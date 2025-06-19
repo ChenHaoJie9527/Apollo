@@ -6,6 +6,6 @@ import type { MaybePromise } from "./MaybePromise";
  * T：响应数据类型
  */
 export type ParseResponse<T> = (
-  response: Response,
-  request: Request
+	response: Response,
+	request: Request,
 ) => MaybePromise<T>;

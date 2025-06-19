@@ -15,14 +15,14 @@ import type { SerializeBody } from "./SerializeBody";
  * @serializeBody: 请求体序列化函数 通常是请求体序列化函数的一些默认配置
  */
 export type DefaultOptions<
-  T extends MinFetchFn,
-  TDefaultParseData,
-  TDefaultRawBody
+	T extends MinFetchFn,
+	TDefaultParseData,
+	TDefaultRawBody,
 > = BaseOptions<T> & {
-  baseUrl?: string;
-  headers?: HeadersInit | HeadersObject; //headerInit: TS内置类型，表示fetch的headers参数类型
-  method?: Method;
-  params?: Record<string, any>;
-  parseResponse?: ParseResponse<TDefaultParseData>;
-  serializeBody?: SerializeBody<TDefaultRawBody>;
+	baseUrl?: string;
+	headers?: HeadersInit | HeadersObject; //headerInit: TS内置类型，表示fetch的headers参数类型
+	method?: Method;
+	params?: Record<string, any>;
+	parseResponse?: ParseResponse<TDefaultParseData>;
+	serializeBody?: SerializeBody<TDefaultRawBody>;
 };

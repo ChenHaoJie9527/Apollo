@@ -1,6 +1,6 @@
 export type DistributiveOmit<
-  T extends Object,
-  K extends keyof T | string & {}
+	T extends Object,
+	K extends keyof T | (string & {}),
 > = T extends unknown ? Omit<T, K> : never;
 
 // // Omit 类型用法
@@ -10,11 +10,3 @@ export type DistributiveOmit<
 // let c: C;
 
 // let d: DistributiveOmit<C, "a"> // {b: number} | {c: boolean}
-
-
-
-
-
-
-
-

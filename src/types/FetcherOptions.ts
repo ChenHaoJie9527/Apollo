@@ -1,8 +1,8 @@
-import type { MinFetchFn } from "./MinFetchFn";
 import type { StandardSchemaV1 } from "@standard-schema/spec";
 import type { BaseOptions } from "./BaseOptions";
 import type { HeadersObject } from "./HeadersObject";
 import type { Method } from "./Method";
+import type { MinFetchFn } from "./MinFetchFn";
 import type { ParseResponse } from "./ParseResponse";
 import type { SerializeBody } from "./SerializeBody";
 
@@ -15,17 +15,17 @@ import type { SerializeBody } from "./SerializeBody";
  * & {}：用于添加一个空对象类型，表示剩余的类型必须是一个对象
  */
 export type FetcherOptions<
-  T extends MinFetchFn,
-  TSchema extends StandardSchemaV1,
-  TParsedData,
-  TRawBody
+	T extends MinFetchFn,
+	TSchema extends StandardSchemaV1,
+	TParsedData,
+	TRawBody,
 > = BaseOptions<T> & {
-  baseUrl?: string;
-  body?: NoInfer<TRawBody> | undefined | null;
-  headers?: HeadersInit | HeadersObject;
-  method?: Method;
-  params?: Record<string, any>;
-  schema?: TSchema
-  parseResponse?: ParseResponse<TParsedData>;
-  serializeBody?: SerializeBody<TRawBody>;
+	baseUrl?: string;
+	body?: NoInfer<TRawBody> | undefined | null;
+	headers?: HeadersInit | HeadersObject;
+	method?: Method;
+	params?: Record<string, any>;
+	schema?: TSchema;
+	parseResponse?: ParseResponse<TParsedData>;
+	serializeBody?: SerializeBody<TRawBody>;
 } & {};

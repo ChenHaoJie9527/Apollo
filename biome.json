@@ -15,21 +15,14 @@
 			"**/*.js",
 			"**/*.jsx"
 		],
-		"ignore": [
-			"dist"
-		]
+		"ignore": ["dist"]
 	},
 	"formatter": {
 		"enabled": true
 	},
 	"organizeImports": {
 		"enabled": true,
-		"include": [
-			"**/*.ts",
-			"**/*.tsx",
-			"**/*.js",
-			"**/*.jsx"
-		]
+		"include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"]
 	},
 	"linter": {
 		"enabled": true,
@@ -123,16 +116,11 @@
 				"useValidTypeof": "error"
 			}
 		},
-		"ignore": [
-			"dist"
-		]
+		"ignore": ["dist"]
 	},
 	"overrides": [
 		{
-			"include": [
-				"**/*.spec.ts",
-				"**/*.spec-d.ts"
-			],
+			"include": ["**/*.spec.ts", "**/*.spec-d.ts"],
 			"linter": {
 				"rules": {
 					"correctness": {
