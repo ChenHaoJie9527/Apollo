@@ -148,5 +148,48 @@ let d: DistributiveOmit<C, "a"> // {b: number} | {c: boolean}
 
    
 
-5. 
+5. GetDefaultParsedData 工具类型
+
+   ```ts
+   import type { DefaultOptions } from "./DefaultOptions";
+   import type { MinFetchFn } from "./MinFetchFn";
+   
+   // 判断TDefaultOptions是否符合DefaultOptions类型，如果是则提取DefaultOptions第二个类型参数 TDefaultParseData
+   // TDefaultParseData 实际上是从MinFetchFn通过BaseOptions推断出来，通过infer U 占位符提取
+   export type GetDefaultParsedData<TDefaultOptions> =
+     TDefaultOptions extends DefaultOptions<MinFetchFn, infer U, any> ? U : never;
+   
+   // 示例：
+   type MyOptions = DefaultOptions<MinFetchFn, {
+       id: number;
+       name: string
+   }, any>
+   
+   type ParseData1 = GetDefaultParsedData<MyOptions>
+   const parseData1: ParseData1 = {
+       id: 1,
+       name: "John"
+   }
+   
+   ```
+
+6. infer TS内置类型
+
+   1. 在条件类型中使用的场景
+
+      ```ts
+      type ExtractType<T> = T extends Promise<infer U> ? U : never;
+      ```
+
+   2. 在映射类型中的条件类型
+
+      ```ts
+      type ExtractReturnType<T> = {
+        [K in keyof T]: T[K] extends (...args: any[]) => infer R ? R : never;
+      };
+      ```
+
+   3. 
+
+7. 
 

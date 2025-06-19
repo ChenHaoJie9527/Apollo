@@ -31,7 +31,29 @@ Apollo 是一个基于原生Fetch，用于简化和增强前端数据请求的�
   - [x] 定义函数的第一个参数T类型
     - [x] 定义T类型是MinFetchFn基本fetch函数类型
   - [x] 定义函数第二个参数K类型
-    - [ ] 定义K类型是DefaultOptions集合类型
+    - [x] 定义K类型是DefaultOptions集合类型
+    
+    - [ ] _getDefaultOptions 函数第二个参数 options 支持字段
+    
+      - [x] ```ts
+        export type FetcherOptions<
+        	T extends MinFetchFn,
+        	TSchema extends StandardSchemaV1,
+        	TParsedData,
+        	TRawBody,
+        > = BaseOptions<T> & {
+        	baseUrl?: string;
+        	body?: NoInfer<TRawBody> | undefined | null;
+        	headers?: HeadersInit | HeadersObject;
+        	method?: Method;
+        	params?: Record<string, any>;
+        	schema?: TSchema;
+        	parseResponse?: ParseResponse<TParsedData>;
+        	serializeBody?: SerializeBody<TRawBody>;
+        } & {};
+        ```
+    
+        
   - [ ] 校验fetch
   - [ ] 生成options
   - [ ] 合并选项
