@@ -1,6 +1,6 @@
 import type { DefaultOptions } from "./DefaultOptions";
-import type { MinFetchFn } from "./MinFetchFn";
 import type { DefaultRawBody } from "./DefaultRawBody";
+import type { MinFetchFn } from "./MinFetchFn";
 
 /**
  * 辅助类型，判断是否为null
@@ -37,14 +37,14 @@ type IsNull<T> = [T] extends [null] ? true : false;
  * 但排除 null 类型 因为 null 类型可以被赋值给任何类型 null extends unknown 为真
  */
 type IsUnknown<T> = unknown extends T
-  ? IsNull<T> extends false
-    ? true
-    : false
-  : false;
+	? IsNull<T> extends false
+		? true
+		: false
+	: false;
 
 export type GetDefaultRawBody<TDefaultOptions> =
-  TDefaultOptions extends DefaultOptions<MinFetchFn, any, infer U>
-    ? IsUnknown<U> extends true
-      ? DefaultRawBody
-      : U
-    : never;
+	TDefaultOptions extends DefaultOptions<MinFetchFn, any, infer U>
+		? IsUnknown<U> extends true
+			? DefaultRawBody
+			: U
+		: never;

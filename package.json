@@ -1,16 +1,49 @@
 {
 	"name": "apollo",
 	"version": "1.0.0",
-	"main": "index.js",
-	"scripts": {
-		"lint": "biome check --write && tsc --noEmit",
-		"build": "tsup",
-		"test": "vitest run && pnpm run lint"
+	"main": "dist/index.cjs",
+	"module": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"sideEffects": false,
+	"files": [
+		"dist",
+		"src"
+	],
+	"exports": {
+		"./package.json": "./package.json",
+		".": {
+			"import": {
+				"types": "./dist/index.d.ts",
+				"default": "./dist/index.cjs"
+			},
+			"require": {
+				"types": "./dist/index.d.cts",
+				"default": "./dist/index.cjs"
+			}
+		}
 	},
-	"keywords": [],
+	"scripts": {
+		"lint": "biome check --write",
+		"build": "tsup",
+		"test": "vitest run"
+	},
+	"keywords": [
+		"fetch",
+		"fetch-api",
+		"fetch wrapper",
+		"http",
+		"http-client",
+		"api",
+		"got",
+		"axios",
+		"ky",
+		"request",
+		"apollo",
+		"graphql"
+	],
 	"author": "",
 	"license": "ISC",
-	"description": "",
+	"description": "Apollo is a library for building Apollo Client",
 	"devDependencies": {
 		"@biomejs/biome": "2.0.0",
 		"@standard-schema/spec": "^1.0.0",
@@ -18,5 +51,11 @@
 		"tsup": "^8.5.0",
 		"typescript": "^5.8.3",
 		"vitest": "^3.2.3"
+	},
+	"engines": {
+		"node": ">=20"
+	},
+	"publishConfig": {
+		"access": "public"
 	}
 }
