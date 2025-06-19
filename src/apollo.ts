@@ -17,7 +17,7 @@ export const apollo = <
 	> = DefaultOptions<TFetch, any, DefaultRawBody>,
 >(
 	fetch: TFetch,
-	getDefaultOptions: (
+	_getDefaultOptions: (
 		input: Parameters<TFetch>[0],
 		fetchOpts: FetcherOptions<TFetch, any, any, any>,
 		ctx?: Parameters<TFetch>[2],

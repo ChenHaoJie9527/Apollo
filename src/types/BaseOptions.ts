@@ -15,14 +15,14 @@ export type BaseOptions<T extends MinFetchFn> = DistributiveOmit<
 > & {};
 
 //示例:
-type MinFetchFn1 = (url: string, options: RequestInit) => Promise<Response>;
-type BaseOptions1 = Omit<RequestInit, "body" | "headers" | "method"> & {};
+// type MinFetchFn1 = (url: string, options: RequestInit) => Promise<Response>;
+// type BaseOptions1 = Omit<RequestInit, "body" | "headers" | "method"> & {};
 
-const a: BaseOptions1 = {
-	//   headers: {
-	//     "Content-Type": "application/json",
-	//   },
-	//   body: {},
-	//   method: "GET",
-	// 不包含以上3种属性
-};
+// const a: BaseOptions1 = {
+// 	//   headers: {
+// 	//     "Content-Type": "application/json",
+// 	//   },
+// 	//   body: {},
+// 	//   method: "GET",
+// 	// 不包含以上3种属性
+// };
