@@ -24,8 +24,6 @@ export const apollo = <
 		ctx?: Parameters<TFetch>[2],
 	) => MaybePromise<TDefaultOptions> = () => emptyOptions,
 ): Apollo<TFetch, TDefaultOptions> => {
-	console.log("_fetch", _fetch);
-	console.log("getDefaultOptions", getDefaultOptions);
 	return async (input, fetchOpts, ctx) => {
 		const defaultOptions = await getDefaultOptions(input, fetchOpts, ctx);
 		return defaultOptions;

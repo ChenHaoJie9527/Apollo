@@ -1,6 +1,6 @@
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, test, it } from "vitest";
 import { apollo } from "../src/apollo";
-import type { DefaultOptions, FetcherOptions, MinFetchFn } from "../src/types";
+import type { DefaultOptions, MinFetchFn } from "../src/types";
 
 describe("apollo", () => {
   // 判断apollo函数是否存在
@@ -67,7 +67,6 @@ describe("apollo", () => {
         auth: "1234567890",
       }
     );
-    console.log("result====", result);
 
     expect(result).toEqual({
       baseUrl: "https://api.example.com",
@@ -85,26 +84,53 @@ describe("apollo", () => {
       serializeBody: expect.any(Function),
     });
   });
+});
 
-  // // 测试 getDefaultOptions 返回 Promise 的情况
-  // it("should support async getDefaultOptions", async () => {
-  // 	const fetch: MinFetchFn = (_url: string) => Promise.resolve(Response.json({}));
-  // 	const getDefaultOptions = vi.fn().mockResolvedValue({ bar: 456 });
-  // 	const api = apollo(fetch, getDefaultOptions);
-  // 	const result = await api("/test", { method: "POST" } as any);
-  // 	expect(getDefaultOptions).toHaveBeenCalled();
-  // 	expect(result).toEqual({ bar: 456 });
-  // });
+describe("Should receive the apollo arguments (up to 3)", () => {
+  const baseUrl = "https://example.com";
+  test.each`
+    expectedInput       | expectedOptions         | expectedCtx
+    ${baseUrl}          | ${{ method: "DELETE" }} | ${{ is: "ctx" }}
+    ${new URL(baseUrl)} | ${{ method: "DELETE" }} | ${"context"}
+    ${baseUrl}          | ${{ method: "POST" }} | ${{ name: "John", age: 30 }}
+  `("test case %#", async ({ expectedInput, expectedOptions, expectedCtx }) => {
 
-  // // 测试参数是否正确传递到 getDefaultOptions
-  // it("should pass input, fetchOpts, ctx to getDefaultOptions", async () => {
-  // 	const fetch: MinFetchFn = (_url: string) => Promise.resolve(Response.json({}));
-  // 	const getDefaultOptions = vi.fn().mockReturnValue({});
-  // 	const api = apollo(fetch, getDefaultOptions);
-  // 	const input = "/api";
-  // 	const fetchOpts = { method: "PUT" } as any;
-  // 	const ctx = { user: "test" };
-  // 	await api(input, fetchOpts, ctx);
-  // 	expect(getDefaultOptions).toHaveBeenCalledWith(input, fetchOpts, ctx);
-  // });
+    const fetch: MinFetchFn = async (input, fetchOpts, ctx) => {
+      expect(input).toBe(expectedInput);
+      expect(fetchOpts).toEqual(expectedOptions);
+      expect(ctx).toEqual(expectedCtx);
+      return Response.json({});
+    };
+
+    const defaultOptions = (input, fetchOpts, ctx) => {
+      return {
+        baseUrl: expectedInput || expectedInput.href,
+        method: expectedOptions.method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        params: expectedOptions.params,
+        credentials: expectedOptions.credentials,
+        parseResponse: expectedOptions.parseResponse,
+        accessToken: "123",
+        body: expectedCtx,
+      }
+    }
+
+    const api = apollo(fetch, defaultOptions)
+    const result = await api(expectedInput, expectedOptions, expectedCtx)
+
+    expect(result).toEqual({
+      baseUrl: expectedInput,
+      method: expectedOptions.method,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      params: undefined,
+      credentials: undefined,
+      parseResponse: undefined,
+      accessToken: "123",
+      body: expectedCtx,
+    }); 
+  });
 });
