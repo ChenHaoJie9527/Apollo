@@ -134,3 +134,26 @@ describe("Should receive the apollo arguments (up to 3)", () => {
     }); 
   });
 });
+
+describe("Do not pass in the default options function", () => {
+  const baseUrl = "https://example.com";
+  test.each`
+    expectedInput       | expectedOptions         | expectedCtx
+    ${baseUrl}          | ${{ method: "DELETE" }} | ${{ is: "ctx" }}
+    ${new URL(baseUrl)} | ${{ method: "DELETE" }} | ${"context"}
+    ${baseUrl}          | ${{ method: "POST" }} | ${{ name: "John", age: 30 }}
+  `("test case %#", async ({ expectedInput, expectedOptions, expectedCtx }) => {
+    const fetch: MinFetchFn = async (input, fetchOpts, ctx) => {
+      expect(input).toBe(expectedInput);
+      expect(fetchOpts).toEqual(expectedOptions);
+      expect(ctx).toEqual(expectedCtx);
+      return Response.json({});
+    };
+
+    const api = apollo(fetch)
+    const result = await api(expectedInput, expectedOptions, expectedCtx)
+    console.log("result =====", result);
+    // 判断是否为空对象
+    expect(result).toEqual({});
+  })
+})
