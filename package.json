@@ -25,7 +25,8 @@
 	"scripts": {
 		"lint": "biome check --write",
 		"build": "tsup",
-		"test": "vitest run"
+		"test": "vitest run",
+		"knip": "knip"
 	},
 	"keywords": [
 		"fetch",
@@ -48,6 +49,7 @@
 		"@biomejs/biome": "2.0.0",
 		"@standard-schema/spec": "^1.0.0",
 		"@types/node": "^24.0.1",
+		"knip": "^5.61.2",
 		"tsup": "^8.5.0",
 		"typescript": "^5.8.3",
 		"vitest": "^3.2.3"
