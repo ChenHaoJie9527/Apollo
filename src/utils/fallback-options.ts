@@ -45,7 +45,7 @@ export const fallbackOptions: FallbackOptions = {
    */
   serializeParams: (params) => {
     const stringified = Object.fromEntries(
-      Object.entries(params).map(([key, value]) => {
+      Object.entries(params).filter(([_, value]) => value !== undefined).map(([key, value]) => {
         return [key, typeof value === "string" ? value : JSON.stringify(value)];
       })
     );
