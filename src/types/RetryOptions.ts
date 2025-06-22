@@ -6,7 +6,7 @@ import type { MaybePromise } from "./MaybePromise";
  * 在 ts 中， {}类型代表任何非 null 或 undefined 的值
  * {} 在 类型守卫中使用比 unknown 更安全方便，访问 {} 类型任意属性时，ts 仍然会报错
  */
-export type Unknown = {};
+type Unknown = {};
 
 /**
  * 重试上下文
@@ -14,7 +14,7 @@ export type Unknown = {};
  * 1. 收到服务器响应，但响应时5xx错误，在这种情况下， response 字段会是一个Response对象，error字段可能是undefined
  * 2. 请求未发出或者请求未嫌贵那个，网络中断，DNS解析失败，等等，在这种情况下， response 字段是 undefined，error字段会是一个{}对象
  */
-export type RetryContext =
+type RetryContext =
   | {
       response: Response;
       error: undefined;
@@ -32,9 +32,7 @@ export type RetryContext =
  * 2. 如果传递的是一个函数，则表示重试次数的计算函数，函数接收请求对象作为参数，返回一个数字，表示重试次数
  * 3. 如果是重试函数，这就意味着可以根据不同请求，动态设置重试次数，甚至可以是一个异步函数
  */
-export type RetryAttempts =
-  | number
-  | ((request: Request) => MaybePromise<number>);
+type RetryAttempts = number | ((request: Request) => MaybePromise<number>);
 
 /**
  * 定义重试前延迟时间
@@ -45,7 +43,7 @@ export type RetryAttempts =
  * 5.   2.根据错误类型决定延迟：如果是服务器错误 context.response 则延迟5秒;
  * 6.   3.如果是网络错误 context.error 则立即重试
  */
-export type RetryDelay =
+type RetryDelay =
   | number
   | ((context: RetryContext & { attempt: number }) => MaybePromise<number>);
 
@@ -57,7 +55,7 @@ export type RetryDelay =
  * 4.   2.在发生特定类型的网络错误时才重试
  * 5.   3.如果response.body中包含特定错误码，则不重试
  */
-export type RetryWhen = (context: RetryContext) => boolean;
+type RetryWhen = (context: RetryContext) => boolean;
 
 export type RetryOptions = {
   attempts: RetryAttempts; // 重试次数

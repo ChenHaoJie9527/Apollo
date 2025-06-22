@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 import { fallbackOptions } from "../src/utils/fallback-options";
-import { ResponseError } from "../src/utils/response-error";
+// import { ResponseError } from "../src/utils/response-error";
 
 describe("serializeParams", () => {
   test.each`
