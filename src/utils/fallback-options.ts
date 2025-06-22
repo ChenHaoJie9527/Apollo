@@ -1,4 +1,5 @@
 import type { FallbackOptions } from "../types";
+import { ResponseError } from "./response-error";
 
 export const fallbackOptions: FallbackOptions = {
   parseResponse: (response) => {
@@ -8,15 +9,24 @@ export const fallbackOptions: FallbackOptions = {
       .catch(() => response.text())
       .then((data) => data || null);
   },
-  parseRejected: async (res, request) => {
-
+  parseRejected: async (response, request) => {
+    return new ResponseError(
+      response,
+      await parseResponseData(response, request),
+      request
+    );
   },
   serializeParams: (params) => {
-
+    const stringified = Object.fromEntries(
+      Object.entries(params).map(([key, value]) => {
+        return [key, typeof value === "string" ? value : JSON.stringify(value)];
+      })
+    );
+    return new URLSearchParams(stringified).toString();
   },
-  serializeBody: (body: any) => {
+  //   serializeBody: (body: any) => {
 
-  },
+  //   },
   reject: (response) => {
     return !response.ok;
   },
@@ -26,3 +36,7 @@ export const fallbackOptions: FallbackOptions = {
     delay: 0,
   },
 };
+
+async function parseResponseData(response: Response, request: Request) {
+  return fallbackOptions.parseResponse(response, request);
+}
