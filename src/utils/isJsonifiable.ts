@@ -1,5 +1,5 @@
-import type { JsonToObject } from "./JsonToObject";
-import type { JsonToArray } from "./JsonToArray";
+import type { JsonToObject } from "../types/JsonToObject";
+import type { JsonToArray } from "../types/JsonToArray";
 
 const isPlainObject = (value: any): value is Record<string, any> => {
   return value && Object.prototype.toString.call(value) === "[object Object]";
