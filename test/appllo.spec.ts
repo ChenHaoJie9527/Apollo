@@ -152,7 +152,6 @@ describe("Do not pass in the default options function", () => {
 
     const api = apollo(fetch)
     const result = await api(expectedInput, expectedOptions, expectedCtx)
-    console.log("result =====", result);
     // 判断是否为空对象
     expect(result).toEqual({});
   })
