@@ -46,6 +46,7 @@ describe("parseResponse", () => {
   },
 })} | ${{ name: "join", age: 18, status: true }}
     ${new Response("")}   | ${null}
+    ${new Response(`<h1>hello</h1>`)} | ${"<h1>hello</h1>"}
   `("test case parseResponse %#", async ({ response, output }) => {
     expect(
       await fallbackOptions.parseResponse(response, {} as any)
