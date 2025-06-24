@@ -35,12 +35,19 @@ describe("serializeBody", () => {
   });
 });
 
-describe("parseResponse",  () => {
+describe("parseResponse", () => {
   test.each`
-    response | output
+    response              | output
     ${new Response(null)} | ${null}
-    ${new Response()} | ${null}
+    ${new Response()}     | ${null}
+    ${new Response(`{"name": "join", "age": 18, "status": true}`, {
+  headers: {
+    "content-type": "application/json; charset=utf-8",
+  },
+})} | ${{ name: "join", age: 18, status: true }}
   `("test case parseResponse %#", async ({ response, output }) => {
-    expect(await fallbackOptions.parseResponse(response, {} as any)).toStrictEqual(output);
+    expect(
+      await fallbackOptions.parseResponse(response, {} as any)
+    ).toStrictEqual(output);
   });
 });
