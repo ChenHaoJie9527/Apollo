@@ -49,7 +49,8 @@ export const fallbackOptions: FallbackOptions = {
         return [key, typeof value === "string" ? value : JSON.stringify(value)];
       })
     );
-    return new URLSearchParams(stringified).toString();
+    const result = new URLSearchParams(stringified).toString();
+    return result;
   },
   /**
    * 序列化请求体的函数
