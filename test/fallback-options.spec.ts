@@ -45,6 +45,7 @@ describe("parseResponse", () => {
     "content-type": "application/json; charset=utf-8",
   },
 })} | ${{ name: "join", age: 18, status: true }}
+    ${new Response("")}   | ${null}
   `("test case parseResponse %#", async ({ response, output }) => {
     expect(
       await fallbackOptions.parseResponse(response, {} as any)
