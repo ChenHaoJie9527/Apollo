@@ -39,6 +39,7 @@ describe("parseResponse",  () => {
   test.each`
     response | output
     ${new Response(null)} | ${null}
+    ${new Response()} | ${null}
   `("test case parseResponse %#", async ({ response, output }) => {
     expect(await fallbackOptions.parseResponse(response, {} as any)).toStrictEqual(output);
   });
