@@ -12,19 +12,20 @@ import { isJsonifiable } from "./isJsonifiable";
  * 6. retry: 重试选项
  */
 export const fallbackOptions: FallbackOptions = {
-    /**
-     * 解析响应的函数
-     * 1. 克隆响应
-     * 2. 尝试解析为JSON
-     * 3. 如果失败，则尝试解析为文本
-     * 4. 返回解析后的数据
-     */
+  /**
+   * 解析响应的函数
+   * 1. 克隆响应
+   * 2. 尝试解析为JSON
+   * 3. 如果失败，则尝试解析为文本
+   * 4. 返回解析后的数据
+   */
   parseResponse: (response) => {
-    return response
+    const result = response
       .clone()
       .json()
       .catch(() => response.text())
       .then((data) => data || null);
+    return result;
   },
   /**
    * 解析拒绝响应的函数
@@ -45,9 +46,14 @@ export const fallbackOptions: FallbackOptions = {
    */
   serializeParams: (params) => {
     const stringified = Object.fromEntries(
-      Object.entries(params).filter(([_, value]) => value !== undefined).map(([key, value]) => {
-        return [key, typeof value === "string" ? value : JSON.stringify(value)];
-      })
+      Object.entries(params)
+        .filter(([_, value]) => value !== undefined)
+        .map(([key, value]) => {
+          return [
+            key,
+            typeof value === "string" ? value : JSON.stringify(value),
+          ];
+        })
     );
     const result = new URLSearchParams(stringified).toString();
     return result;

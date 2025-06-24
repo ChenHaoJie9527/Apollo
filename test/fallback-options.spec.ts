@@ -34,3 +34,12 @@ describe("serializeBody", () => {
     ).toBe('{"key1":"123","key2":1,"key4":null}');
   });
 });
+
+describe("parseResponse",  () => {
+  test.each`
+    response | output
+    ${new Response(null)} | ${null}
+  `("test case parseResponse %#", async ({ response, output }) => {
+    expect(await fallbackOptions.parseResponse(response, {} as any)).toStrictEqual(output);
+  });
+});
