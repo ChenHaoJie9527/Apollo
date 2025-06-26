@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 import { fallbackOptions } from "../src/utils/fallback-options";
-// import { ResponseError } from "../src/utils/response-error";
+import { ResponseError } from "../src/utils/response-error";
 
 describe("serializeParams", () => {
   test.each`
@@ -37,19 +37,37 @@ describe("serializeBody", () => {
 
 describe("parseResponse", () => {
   test.each`
-    response              | output
-    ${new Response(null)} | ${null}
-    ${new Response()}     | ${null}
+    response                          | output
+    ${new Response(null)}             | ${null}
+    ${new Response()}                 | ${null}
     ${new Response(`{"name": "join", "age": 18, "status": true}`, {
   headers: {
     "content-type": "application/json; charset=utf-8",
   },
 })} | ${{ name: "join", age: 18, status: true }}
-    ${new Response("")}   | ${null}
+    ${new Response("")}               | ${null}
     ${new Response(`<h1>hello</h1>`)} | ${"<h1>hello</h1>"}
   `("test case parseResponse %#", async ({ response, output }) => {
     expect(
       await fallbackOptions.parseResponse(response, {} as any)
     ).toStrictEqual(output);
+  });
+});
+
+describe("parseRejected", () => {
+  test.each`
+    response | output
+    ${new Response(`{"name": "join", "age": 18, "status": true}`, {
+  headers: {
+    "Content-type": "application/json; charset=utf-8",
+  },
+})} | ${{ name: "join", age: 18, status: true }}
+  `("test case parseRejected %#", async ({ response, _output }) => {
+    const request = new Request("https://www.robots.com");
+    const responseError: ResponseError = await fallbackOptions.parseRejected(
+      response,
+      request
+    );
+    expect(responseError instanceof ResponseError).toBeTruthy();
   });
 });

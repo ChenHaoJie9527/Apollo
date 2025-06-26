@@ -33,11 +33,12 @@ export const fallbackOptions: FallbackOptions = {
    * 2. 返回 ResponseError 实例
    */
   parseRejected: async (response, request) => {
-    return new ResponseError(
+    const result = new ResponseError(
       response,
       await parseResponseData(response, request),
       request
     );
+    return result;
   },
   /**
    * 序列化参数的函数
