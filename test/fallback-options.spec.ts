@@ -56,18 +56,27 @@ describe("parseResponse", () => {
 
 describe("parseRejected", () => {
   test.each`
-    response | output
+    response              | output
+    ${new Response(null)} | ${null}
+    ${new Response()}     | ${null}
+    ${new Response('')}   | ${null}
     ${new Response(`{"name": "join", "age": 18, "status": true}`, {
   headers: {
     "Content-type": "application/json; charset=utf-8",
   },
 })} | ${{ name: "join", age: 18, status: true }}
-  `("test case parseRejected %#", async ({ response, _output }) => {
+  `("test case parseRejected %#", async ({ response, output }) => {
     const request = new Request("https://www.robots.com");
     const responseError: ResponseError = await fallbackOptions.parseRejected(
       response,
       request
     );
     expect(responseError instanceof ResponseError).toBeTruthy();
+    expect(responseError.data).toStrictEqual(output);
+    expect(responseError.request).toStrictEqual(request);
+    expect(responseError.response).toStrictEqual(response);
+    expect(responseError.name).toBe("ResponseError");
+    expect(responseError.status).toBe(200);
+    expect(responseError.message.startsWith("[200]")).toBeTruthy();
   });
 });
