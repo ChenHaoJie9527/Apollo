@@ -26,7 +26,8 @@
 		"lint": "biome check --write",
 		"build": "tsup",
 		"test": "vitest run",
-		"knip": "knip"
+		"knip": "knip",
+		"build-rolldown": "rolldown -c rolldown.config.ts"
 	},
 	"keywords": [
 		"fetch",
@@ -50,6 +51,8 @@
 		"@standard-schema/spec": "^1.0.0",
 		"@types/node": "^24.0.1",
 		"knip": "^5.61.2",
+		"rolldown": "1.0.0-beta.20",
+		"rolldown-plugin-dts": "^0.13.12",
 		"tsup": "^8.5.0",
 		"typescript": "^5.8.3",
 		"vitest": "^3.2.3"
