@@ -103,35 +103,35 @@ describe("mergeEventHandlers", () => {
     });
   });
 
-  // describe("事件名称识别", () => {
-  //   test.each`
-  //     eventName       | shouldMatch
-  //     ${"onSuccess"}  | ${true}
-  //     ${"onClick"}    | ${true}
-  //     ${"onError"}    | ${true}
-  //     ${"onRetry"}    | ${true}
-  //     ${"onAbort"}    | ${true}
-  //     ${"success"}    | ${false}
-  //     ${"onclick"}    | ${false}
-  //     ${"ON_SUCCESS"} | ${false}
-  //     ${"on_success"} | ${false}
-  //     ${"on"}         | ${false}
-  //     ${"onlowercase"} | ${false}
-  //   `("$eventName 应该${shouldMatch ? '' : '不'}被识别为事件处理器", ({ eventName, shouldMatch }) => {
-  //     const handler = vi.fn();
+  describe("Event name recognition", () => {
+    test.each`
+      eventName       | shouldMatch
+      ${"onSuccess"}  | ${true}
+      ${"onClick"}    | ${true}
+      ${"onError"}    | ${true}
+      ${"onRetry"}    | ${true}
+      ${"onAbort"}    | ${true}
+      ${"success"}    | ${false}
+      ${"onclick"}    | ${false}
+      ${"ON_SUCCESS"} | ${false}
+      ${"on_success"} | ${false}
+      ${"on"}         | ${false}
+      ${"onlowercase"} | ${false}
+    `("$eventName should ${shouldMatch ? '' : 'no'} be recognized as an event handler", ({ eventName, shouldMatch }) => {
+      const handler = vi.fn();
 
-  //     const defaultOptions = {};
-  //     const fetchOpts = { [eventName]: handler };
+      const defaultOptions = {};
+      const fetchOpts = { [eventName]: handler };
 
-  //     const result = mergeEventHandlers(defaultOptions, fetchOpts);
+      const result = mergeEventHandlers(defaultOptions, fetchOpts);
 
-  //     if (shouldMatch) {
-  //       expect(result[eventName]).toBe(handler);
-  //     } else {
-  //       expect(result[eventName]).toBeUndefined();
-  //     }
-  //   });
-  // });
+      if (shouldMatch) {
+        expect(result[eventName]).toBe(handler);
+      } else {
+        expect(result[eventName]).toBeUndefined();
+      }
+    });
+  });
 
   // describe("复杂场景", () => {
   //   test("多个事件处理器的混合场景", () => {
