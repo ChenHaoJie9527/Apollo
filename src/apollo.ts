@@ -26,7 +26,7 @@ export const apollo = <
   ) => MaybePromise<TDefaultOptions> = () => emptyOptions
 ): Apollo<TFetch, TDefaultOptions> => {
   return async (input, fetchOpts, ctx) => {
-    const defaultOptions = await getDefaultOptions(input, fetchOpts, ctx);
+    let defaultOptions = await getDefaultOptions(input, fetchOpts, ctx);
 
     const mergedOptions = mergeOptions(
       fallbackOptions,
@@ -34,6 +34,9 @@ export const apollo = <
       fetchOpts,
       emptyOptions
     );
+
+    defaultOptions = mergeEventHandlers(defaultOptions, fetchOpts);
+
     return defaultOptions;
   };
 };
@@ -58,4 +61,41 @@ function mergeOptions<T1, T2, T3, T4>(opt1: T1, opt2: T2, opt3: T3, opt4: T4) {
   }
 
   return merged;
+}
+
+export function mergeEventHandlers<
+  T extends Record<string, any>,
+  U extends Record<string, any>
+>(defaultOptions: T, fetchOpts: U) {
+  Object.keys(defaultOptions).forEach((key) => {
+    if (/^on[A-Z]/.test(key)) {
+      const originalHandler = defaultOptions[key];
+      const fetchHandler = fetchOpts[key];
+      if (
+        typeof originalHandler === "function" &&
+        typeof fetchHandler === "function"
+      ) {
+        (defaultOptions as any)[key] = (...args: any[]) => {
+          originalHandler(...args);
+          fetchHandler(...args);
+        };
+      } else if (
+        typeof fetchHandler === "function" &&
+        typeof originalHandler !== "function"
+      ) {
+        (defaultOptions as any)[key] = fetchHandler;
+      }
+    }
+  });
+
+  // Object.keys(fetchOpts).forEach((key) => {
+  //   if (/^on[A-Z]/.test(key)) {
+  //     const fetchHandler = fetchOpts[key];
+  //     if (typeof fetchHandler === "function" && !defaultOptions[key]) {
+  //       (defaultOptions as any)[key] = fetchHandler;
+  //     }
+  //   }
+  // });
+
+  return defaultOptions;
 }
