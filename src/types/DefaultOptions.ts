@@ -4,6 +4,7 @@ import type { Method } from "./Method";
 import type { MinFetchFn } from "./MinFetchFn";
 import type { ParseResponse } from "./ParseResponse";
 import type { SerializeBody } from "./SerializeBody";
+import type { RetryOptions } from "./RetryOptions";
 
 /**
  * 客户端的默认配置选项
@@ -25,4 +26,5 @@ export type DefaultOptions<
 	params?: Record<string, any>;
 	parseResponse?: ParseResponse<TDefaultParseData>;
 	serializeBody?: SerializeBody<TDefaultRawBody>;
+	retry?: RetryOptions;
 };
