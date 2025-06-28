@@ -46,62 +46,62 @@ describe("mergeEventHandlers", () => {
     });
   });
 
-  // describe("只有一个对象有事件处理器", () => {
-  //   test("只有 defaultOptions 有事件处理器时应该保持不变", () => {
-  //     const handler = vi.fn();
+  describe("Only one object has an event handler", () => {
+    test("When only defaultOptions has an event handler, it should remain unchanged", () => {
+      const handler = vi.fn();
 
-  //     const defaultOptions = {
-  //       onSuccess: handler,
-  //       onClick: handler
-  //     };
+      const defaultOptions = {
+        onSuccess: handler,
+        onClick: handler
+      };
 
-  //     const fetchOpts = {
-  //       normalProp: "value"
-  //     };
+      const fetchOpts = {
+        normalProp: "value"
+      };
 
-  //     const result = mergeEventHandlers(defaultOptions, fetchOpts);
+      const result = mergeEventHandlers(defaultOptions, fetchOpts);
 
-  //     expect(result.onSuccess).toBe(handler);
-  //     expect(result.onClick).toBe(handler);
-  //   });
+      expect(result.onSuccess).toBe(handler);
+      expect(result.onClick).toBe(handler);
+    });
 
-  //   test("只有 fetchOpts 有事件处理器时应该复制到 defaultOptions", () => {
-  //     const handler = vi.fn();
+    // test("只有 fetchOpts 有事件处理器时应该复制到 defaultOptions", () => {
+    //   const handler = vi.fn();
 
-  //     const defaultOptions = {
-  //       normalProp: "value"
-  //     };
+    //   const defaultOptions = {
+    //     normalProp: "value"
+    //   };
 
-  //     const fetchOpts = {
-  //       onSuccess: handler,
-  //       onRetry: handler
-  //     };
+    //   const fetchOpts = {
+    //     onSuccess: handler,
+    //     onRetry: handler
+    //   };
 
-  //     const result = mergeEventHandlers(defaultOptions, fetchOpts);
+    //   const result = mergeEventHandlers(defaultOptions, fetchOpts);
 
-  //     expect(result.onSuccess).toBe(handler);
-  //     expect(result.onRetry).toBe(handler);
-  //   });
+    //   expect(result.onSuccess).toBe(handler);
+    //   expect(result.onRetry).toBe(handler);
+    // });
 
-  //   test("defaultOptions 有非函数值时，应该被 fetchOpts 的函数覆盖", () => {
-  //     const handler = vi.fn();
+    // test("defaultOptions 有非函数值时，应该被 fetchOpts 的函数覆盖", () => {
+    //   const handler = vi.fn();
 
-  //     const defaultOptions = {
-  //       onSuccess: "not a function",
-  //       onError: undefined
-  //     };
+    //   const defaultOptions = {
+    //     onSuccess: "not a function",
+    //     onError: undefined
+    //   };
 
-  //     const fetchOpts = {
-  //       onSuccess: handler,
-  //       onError: handler
-  //     };
+    //   const fetchOpts = {
+    //     onSuccess: handler,
+    //     onError: handler
+    //   };
 
-  //     const result = mergeEventHandlers(defaultOptions, fetchOpts);
+    //   const result = mergeEventHandlers(defaultOptions, fetchOpts);
 
-  //     expect(result.onSuccess).toBe(handler);
-  //     expect(result.onError).toBe(handler);
-  //   });
-  // });
+    //   expect(result.onSuccess).toBe(handler);
+    //   expect(result.onError).toBe(handler);
+    // });
+  });
 
   // describe("事件名称识别", () => {
   //   test.each`
