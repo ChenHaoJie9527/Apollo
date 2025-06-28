@@ -35,7 +35,7 @@ export const apollo = <
       emptyOptions
     );
 
-    defaultOptions = mergeEventHandlers(defaultOptions, fetchOpts);
+    defaultOptions = mergeEventHandlers(defaultOptions, fetchOpts) as TDefaultOptions;
 
     return defaultOptions;
   };
@@ -67,6 +67,7 @@ export function mergeEventHandlers<
   T extends Record<string, any>,
   U extends Record<string, any>
 >(defaultOptions: T, fetchOpts: U) {
+  let mergeOptions: Record<string, any> = { ...defaultOptions };
   Object.keys(defaultOptions).forEach((key) => {
     if (/^on[A-Z]/.test(key)) {
       const originalHandler = defaultOptions[key];
@@ -75,7 +76,7 @@ export function mergeEventHandlers<
         typeof originalHandler === "function" &&
         typeof fetchHandler === "function"
       ) {
-        (defaultOptions as any)[key] = (...args: any[]) => {
+        (mergeOptions as any)[key] = (...args: any[]) => {
           originalHandler(...args);
           fetchHandler(...args);
         };
@@ -83,19 +84,19 @@ export function mergeEventHandlers<
         typeof fetchHandler === "function" &&
         typeof originalHandler !== "function"
       ) {
-        (defaultOptions as any)[key] = fetchHandler;
+        (mergeOptions as any)[key] = fetchHandler;
       }
     }
   });
 
-  // Object.keys(fetchOpts).forEach((key) => {
-  //   if (/^on[A-Z]/.test(key)) {
-  //     const fetchHandler = fetchOpts[key];
-  //     if (typeof fetchHandler === "function" && !defaultOptions[key]) {
-  //       (defaultOptions as any)[key] = fetchHandler;
-  //     }
-  //   }
-  // });
+  Object.keys(fetchOpts).forEach((key) => {
+    if (/^on[A-Z]/.test(key)) {
+      const fetchHandler = fetchOpts[key];
+      if (typeof fetchHandler === "function" && !defaultOptions[key]) {
+        (mergeOptions as any)[key] = fetchHandler;
+      }
+    }
+  });
 
-  return defaultOptions;
+  return mergeOptions;
 }

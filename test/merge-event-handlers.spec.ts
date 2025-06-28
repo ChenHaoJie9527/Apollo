@@ -65,23 +65,23 @@ describe("mergeEventHandlers", () => {
       expect(result.onClick).toBe(handler);
     });
 
-    // test("只有 fetchOpts 有事件处理器时应该复制到 defaultOptions", () => {
-    //   const handler = vi.fn();
+    test("Only fetchOpts with event handlers should be copied to defaultOptions.", () => {
+      const handler = vi.fn();
 
-    //   const defaultOptions = {
-    //     normalProp: "value"
-    //   };
+      const defaultOptions = {
+        normalProp: "value"
+      };
 
-    //   const fetchOpts = {
-    //     onSuccess: handler,
-    //     onRetry: handler
-    //   };
+      const fetchOpts = {
+        onSuccess: handler,
+        onRetry: handler
+      };
 
-    //   const result = mergeEventHandlers(defaultOptions, fetchOpts);
+      const result = mergeEventHandlers(defaultOptions, fetchOpts);
 
-    //   expect(result.onSuccess).toBe(handler);
-    //   expect(result.onRetry).toBe(handler);
-    // });
+      expect(result.onSuccess).toBe(handler);
+      expect(result.onRetry).toBe(handler);
+    });
 
     // test("defaultOptions 有非函数值时，应该被 fetchOpts 的函数覆盖", () => {
     //   const handler = vi.fn();
