@@ -83,24 +83,24 @@ describe("mergeEventHandlers", () => {
       expect(result.onRetry).toBe(handler);
     });
 
-    // test("defaultOptions 有非函数值时，应该被 fetchOpts 的函数覆盖", () => {
-    //   const handler = vi.fn();
+    test("When defaultOptions has a non-function value, it should be overridden by the function in fetchOpts", () => {
+      const handler = vi.fn();
 
-    //   const defaultOptions = {
-    //     onSuccess: "not a function",
-    //     onError: undefined
-    //   };
+      const defaultOptions = {
+        onSuccess: "not a function",
+        onError: undefined
+      };
 
-    //   const fetchOpts = {
-    //     onSuccess: handler,
-    //     onError: handler
-    //   };
+      const fetchOpts = {
+        onSuccess: handler,
+        onError: handler
+      };
 
-    //   const result = mergeEventHandlers(defaultOptions, fetchOpts);
+      const result = mergeEventHandlers(defaultOptions, fetchOpts);
 
-    //   expect(result.onSuccess).toBe(handler);
-    //   expect(result.onError).toBe(handler);
-    // });
+      expect(result.onSuccess).toBe(handler);
+      expect(result.onError).toBe(handler);
+    });
   });
 
   // describe("事件名称识别", () => {

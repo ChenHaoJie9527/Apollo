@@ -67,7 +67,7 @@ export function mergeEventHandlers<
   T extends Record<string, any>,
   U extends Record<string, any>
 >(defaultOptions: T, fetchOpts: U) {
-  let mergeOptions: Record<string, any> = { ...defaultOptions };
+  const mergeOptions: Record<string, any> = { ...defaultOptions };
   Object.keys(defaultOptions).forEach((key) => {
     if (/^on[A-Z]/.test(key)) {
       const originalHandler = defaultOptions[key];
