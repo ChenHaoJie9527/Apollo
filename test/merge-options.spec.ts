@@ -1,0 +1,23 @@
+import { describe, expect, test } from "vitest";
+import { mergeOptions } from "../src/utils/merge-options";
+
+describe("mergeOptions", () => {
+  describe("Basic object consolidation", () => {
+    test("Should merge four objects in order (later overrides earlier)", () => {
+      const opt1 = { a: 1, b: "first", shared: "from-opt1" };
+      const opt2 = { b: "second", c: true, shared: "from-opt2" };
+      const opt3 = { c: false, d: [1, 2, 3], shared: "from-opt3" };
+      const opt4 = { d: [4, 5], e: { nested: "value" }, shared: "from-opt4" };
+
+      const result = mergeOptions(opt1, opt2, opt3, opt4);
+      expect(result).toEqual({
+        a: 1,
+        b: "second",
+        c: false,
+        d: [4, 5],
+        e: { nested: "value" },
+        shared: "from-opt4",
+      });
+    });
+  });
+});
