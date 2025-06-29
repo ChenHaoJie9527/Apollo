@@ -1,5 +1,5 @@
 import { describe, expect, test, vi } from "vitest";
-import { mergeEventHandlers } from "../src/apollo";
+import { mergeEventHandlers } from "../src/utils/merge-event-handlers";
 
 describe("mergeEventHandlers", () => {
   describe("Merge event handlers that both objects have", () => {
