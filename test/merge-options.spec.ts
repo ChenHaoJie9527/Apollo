@@ -45,5 +45,17 @@ describe("mergeOptions", () => {
       const result3 = mergeOptions({}, {}, {}, { a: 1 });
       expect(result3).toEqual({ a: 1 });
     });
+
+    test("Should handle different data types", () => {
+      const opt1 = { value: "string" };
+      const opt2 = { value: 123 };
+      const opt3 = { value: true };
+      const opt4 = { value: { nested: "object" } };
+
+      const result = mergeOptions(opt1, opt2, opt3, opt4);
+      expect(result).toEqual({
+        value: { nested: "object" },
+      });
+    });
   });
 });
