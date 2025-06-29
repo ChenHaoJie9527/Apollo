@@ -34,5 +34,16 @@ describe("mergeOptions", () => {
         d: "new",
       });
     });
+
+    test("Should handle empty objects", () => {
+      const result1 = mergeOptions({}, {}, {}, {});
+      expect(result1).toEqual({});
+
+      const result2 = mergeOptions({ a: 1 }, {}, {}, {});
+      expect(result2).toEqual({ a: 1 });
+
+      const result3 = mergeOptions({}, {}, {}, { a: 1 });
+      expect(result3).toEqual({ a: 1 });
+    });
   });
 });
