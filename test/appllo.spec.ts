@@ -77,6 +77,7 @@ describe("apollo", () => {
         when: expect.any(Function),
       },
       serializeParams: expect.any(Function),
+      serializeBody: expect.any(Function),
       baseUrl: "https://api.example.com",
       headers: {
         "Content-Type": "application/json",
@@ -88,7 +89,6 @@ describe("apollo", () => {
       },
       credentials: "include",
       parseResponse: expect.any(Function),
-      serializeBody: expect.any(Function),
     });
   });
 });
@@ -145,7 +145,7 @@ describe("Should receive the apollo arguments (up to 3)", () => {
       credentials: undefined,
       parseResponse: undefined,
       accessToken: "123",
-      body: expectedCtx,
+      body: typeof expectedCtx === "object" ? JSON.stringify(expectedCtx) : expectedCtx,
     });
   });
 });

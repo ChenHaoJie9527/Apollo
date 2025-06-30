@@ -27,7 +27,6 @@ export const apollo = <
 ): Apollo<TFetch, TDefaultOptions> => {
   return async (input, fetchOpts, ctx) => {
     const defaultOptions = await getDefaultOptions(input, fetchOpts, ctx);
-
     // 1. Merge all base properties first (including fallbackOptions, defaultOptions, fetchOpts)
     const mergedOptions = mergeOptions(
       fallbackOptions,
@@ -41,6 +40,12 @@ export const apollo = <
       mergedOptions,
       fetchOpts
     ) as TDefaultOptions;
+
+    // 3. Serialize the request body (only when there is actual body content)
+    const currentBody = (finalOptions as any).body;
+    if (currentBody !== undefined && currentBody !== null) {
+      (finalOptions as any).body = (finalOptions as any).serializeBody?.(currentBody);
+    }
 
     return finalOptions;
   };
