@@ -164,4 +164,24 @@ describe("retry property deep merge", () => {
       }
     })
   });
+
+  test("should handle non-object retry values - show actual behavior", () => {
+    const opt1 = {
+      retry: 3,
+    };
+    const opt2 = {
+      retry: "not-object",
+    };
+    const opt3 = {
+      retry: [1, 2, 3]
+    }
+    const opt4 = {
+      delay: 1000
+    }
+    const result = mergeOptions(opt1, opt2, opt3, opt4);
+    expect(result).toEqual({
+      retry: [1, 2, 3],
+      delay: 1000,
+    })
+  })
 });

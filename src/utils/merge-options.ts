@@ -12,10 +12,10 @@ export function mergeOptions<T1, T2, T3, T4>(
   };
 
   const retryOptions = {
-    ...(opt1 as any)?.retry,
-    ...(opt2 as any)?.retry,
-    ...(opt3 as any)?.retry,
-    ...(opt4 as any)?.retry,
+    ...(checkRetryIsObject(opt1) ? (opt1 as any)?.retry : {}),
+    ...(checkRetryIsObject(opt2) ? (opt2 as any)?.retry : {}),
+    ...(checkRetryIsObject(opt3) ? (opt3 as any)?.retry : {}),
+    ...(checkRetryIsObject(opt4) ? (opt4 as any)?.retry : {}),
   };
 
   if (Object.keys(retryOptions).length > 0) {
@@ -23,4 +23,8 @@ export function mergeOptions<T1, T2, T3, T4>(
   }
 
   return merged;
+}
+
+function checkRetryIsObject(opt: any) {
+  return Object.prototype.toString.call(opt?.retry) === "[object Object]";
 }
