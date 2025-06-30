@@ -59,3 +59,55 @@ describe("mergeOptions", () => {
     });
   });
 });
+
+describe("retry property deep merge", () => {
+  test("should deep merge all objects' retry property", () => {
+    const opt1 = {
+      retry: {
+        attempts: 3,
+        factor: 2,
+        maxDelay: 1000,
+        minDelay: 100,
+      },
+      other: "value1"
+    };
+    const opt2 = {
+      retry: {
+        attempts: 5,
+        // TODO: This is an error because when is a function and cannot be merged.
+        // when: () => true
+      },
+      other: "value2"
+    }
+    const opt3 = {
+      retry: {
+        attempts: 7,
+        backoff: "exponential",
+        maxDelay: 2000,
+      },
+      other: "value3",
+    };
+    const opt4 = {
+      retry: {
+        attempts: 9,
+        factor: 3,
+        backoff: "linear",
+      },
+      other: "value4"
+    }
+
+    const result = mergeOptions(opt1, opt2, opt3, opt4);
+    console.log("result =>", result);
+    expect(result).toEqual({
+      retry: {
+        attempts: 9,
+        factor: 3,
+        maxDelay: 2000,
+        minDelay: 100,
+        // when: () => true,
+        backoff: "linear",
+      },
+      other: "value4"
+    })
+  })
+})
