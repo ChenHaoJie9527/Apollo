@@ -209,3 +209,46 @@ describe("retry property deep merge", () => {
     expect(result).not.toHaveProperty("retry");
   });
 });
+
+describe("Complex scenarios", () => {
+  test("should handle deeply nested objects (except retry)", () => {
+    const opt1 = {
+      nested: {
+        a: 1,
+        b: {
+          x: "deep1",
+        },
+      },
+      retry: {
+        a: 1,
+        attempts: 1,
+      },
+    };
+    const opt2 = {
+      nested: {
+        b: {
+          y: "deep2",
+        },
+      },
+      retry: {
+        attempts: 3,
+        factor: 2,
+      },
+    };
+    const result = mergeOptions(opt1, opt2, {}, {});
+
+    // Ordinary nested objects are shallowly merged and then overwritten
+    expect(result.nested).toEqual({
+      b: {
+        y: "deep2",
+      },
+    });
+
+    // retry property is deeply merged and then overwritten
+    expect(result.retry).toEqual({
+      attempts: 3,
+      factor: 2,
+      a: 1,
+    });
+  });
+});
