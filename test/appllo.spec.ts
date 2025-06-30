@@ -80,7 +80,7 @@ describe("apollo", () => {
       serializeBody: expect.any(Function),
       baseUrl: "https://api.example.com",
       headers: {
-        "Content-Type": "application/json",
+        "content-type": "application/json",
       },
       method: "GET",
       params: {
@@ -139,7 +139,7 @@ describe("Should receive the apollo arguments (up to 3)", () => {
       baseUrl: expectedInput,
       method: expectedOptions.method,
       headers: {
-        "Content-Type": "application/json",
+        "content-type": "application/json",
       },
       params: undefined,
       credentials: undefined,
@@ -179,6 +179,7 @@ describe("Do not pass in the default options function", () => {
       },
       serializeBody: expect.any(Function),
       serializeParams: expect.any(Function),
+      headers: {},
       method: expectedOptions.method,
     });
   });

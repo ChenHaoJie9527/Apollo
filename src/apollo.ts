@@ -6,7 +6,13 @@ import type {
   MaybePromise,
   MinFetchFn,
 } from "./types";
-import { fallbackOptions, mergeEventHandlers, mergeOptions } from "./utils";
+import type { HeadersObject } from "./types/HeadersObject";
+import {
+  fallbackOptions,
+  mergeEventHandlers,
+  mergeOptions,
+  isJsonifiable,
+} from "./utils";
 
 const emptyOptions = {} as any;
 
@@ -43,10 +49,42 @@ export const apollo = <
 
     // 3. Serialize the request body (only when there is actual body content)
     const currentBody = (finalOptions as any).body;
-    if (currentBody !== undefined && currentBody !== null) {
-      (finalOptions as any).body = (finalOptions as any).serializeBody?.(currentBody);
+    let wasBodySerialized = false;
+    
+    if (
+      currentBody !== undefined &&
+      currentBody !== null &&
+      isJsonifiable(currentBody)
+    ) {
+      (finalOptions as any).body = finalOptions.serializeBody?.(currentBody);
+      wasBodySerialized = true;
     }
+
+    // 4. Handle headers - add Content-Type if body was serialized
+    const currentHeaders = mergeHeaders([
+      wasBodySerialized ? { "Content-Type": "application/json" } : {},
+      finalOptions.headers,
+    ]);
+
+
+    finalOptions.headers = currentHeaders;
 
     return finalOptions;
   };
+};
+
+const mergeHeaders = (
+  headerInits: (HeadersInit | HeadersObject | undefined)[]
+) => {
+  const res: Record<string, string> = {};
+  headerInits.forEach((init) => {
+    // casting `init` to `HeadersInit` because `Record<string, any>` is
+    // properly transformed to `Record<string,string>` by `new Headers(init)`
+    new Headers(init as HeadersInit | undefined).forEach((value, key) => {
+      value === "null" || value === "undefined"
+        ? delete res[key]
+        : (res[key] = value);
+    });
+  });
+  return res;
 };

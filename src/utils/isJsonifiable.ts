@@ -11,6 +11,6 @@ export const isJsonifiable = (
   return (
     isPlainObject(value) ||
     Array.isArray(value) ||
-    typeof value.toJSON === "function"
+    (value && typeof value.toJSON === "function")
   );
 };
