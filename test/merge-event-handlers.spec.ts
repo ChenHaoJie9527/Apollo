@@ -197,32 +197,32 @@ describe("mergeEventHandlers", () => {
       expect(result.onError).toBe(fetchOpts.onError);
     });
 
-    // it("异步事件处理器", async () => {
-    //   const results: string[] = [];
+    it("asynchronous event handler", async () => {
+      const results: string[] = [];
 
-    //   const defaultOptions = {
-    //     onSuccess: async () => {
-    //       await new Promise(resolve => setTimeout(resolve, 10));
-    //       results.push("default");
-    //     }
-    //   };
+      const defaultOptions = {
+        onSuccess: async () => {
+          await new Promise(resolve => setTimeout(resolve, 10));
+          results.push("default");
+        }
+      };
 
-    //   const fetchOpts = {
-    //     onSuccess: async () => {
-    //       await new Promise(resolve => setTimeout(resolve, 5));
-    //       results.push("fetch");
-    //     }
-    //   };
+      const fetchOpts = {
+        onSuccess: async () => {
+          await new Promise(resolve => setTimeout(resolve, 5));
+          results.push("fetch");
+        }
+      };
 
-    //   const merged = mergeEventHandlers(defaultOptions, fetchOpts);
+      const merged = mergeEventHandlers(defaultOptions, fetchOpts);
 
-    //   // 注意：合并后的函数不会等待异步完成
-    //   merged.onSuccess();
+      // Note: The merged function does not wait for the asynchronous operation to complete
+      merged.onSuccess();
 
-    //   // 等待一些时间让异步操作完成
-    //   await new Promise(resolve => setTimeout(resolve, 50));
+      // Wait for some time for the asynchronous operation to complete
+      await new Promise(resolve => setTimeout(resolve, 50));
 
-    //   expect(results).toEqual(["default", "fetch"]);
-    // });
+      expect(results).toEqual(["fetch", "default"]);
+    });
   });
 });
