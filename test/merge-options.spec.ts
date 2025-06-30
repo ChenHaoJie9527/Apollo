@@ -69,7 +69,7 @@ describe("retry property deep merge", () => {
         maxDelay: 1000,
         minDelay: 100,
       },
-      other: "value1"
+      other: "value1",
     };
     const opt2 = {
       retry: {
@@ -77,8 +77,8 @@ describe("retry property deep merge", () => {
         // TODO: This is an error because when is a function and cannot be merged.
         // when: () => true
       },
-      other: "value2"
-    }
+      other: "value2",
+    };
     const opt3 = {
       retry: {
         attempts: 7,
@@ -93,8 +93,8 @@ describe("retry property deep merge", () => {
         factor: 3,
         backoff: "linear",
       },
-      other: "value4"
-    }
+      other: "value4",
+    };
 
     const result = mergeOptions(opt1, opt2, opt3, opt4);
     console.log("result =>", result);
@@ -107,7 +107,34 @@ describe("retry property deep merge", () => {
         // when: () => true,
         backoff: "linear",
       },
-      other: "value4"
-    })
-  })
-})
+      other: "value4",
+    });
+  });
+  test("should handle partial objects with retry property", () => {
+    const opt1 = {
+      normal: "prop1",
+    };
+    const opt2 = {
+      retry: {
+        attempts: 3,
+      },
+    };
+    const opt3 = {
+      normal: "updated",
+    };
+    const opt4 = {
+      retry: {
+        attempts: 4,
+        delay: 1000,
+      },
+    };
+    const result = mergeOptions(opt1, opt2, opt3, opt4);
+    expect(result).toEqual({
+      normal: "updated",
+      retry: {
+        attempts: 4,
+        delay: 1000,
+      },
+    });
+  });
+});
