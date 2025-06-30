@@ -1,9 +1,9 @@
-import { describe, expect, test, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { mergeEventHandlers } from "../src/utils";
 
 describe("mergeEventHandlers", () => {
   describe("Merge event handlers that both objects have", () => {
-    test("Should execute two onSuccess handlers in order", () => {
+    it("Should execute two onSuccess handlers in order", () => {
       const callOrder: string[] = [];
 
       const defaultOptions = {
@@ -24,7 +24,7 @@ describe("mergeEventHandlers", () => {
       expect(result.normalProp).toBe("value1"); // Non-event properties are not affected
     });
 
-    test("Should pass parameters to both handlers", () => {
+    it("Should pass parameters to both handlers", () => {
       const defaultSpy = vi.fn();
       const fetchSpy = vi.fn();
 
@@ -38,7 +38,7 @@ describe("mergeEventHandlers", () => {
 
       const result = mergeEventHandlers(defaultOptions, fetchOpts);
 
-      const errorObj = new Error("test error");
+      const errorObj = new Error("it error");
       result.onError(errorObj, "additional", 123);
 
       expect(defaultSpy).toHaveBeenCalledWith(errorObj, "additional", 123);
@@ -47,7 +47,7 @@ describe("mergeEventHandlers", () => {
   });
 
   describe("Only one object has an event handler", () => {
-    test("When only defaultOptions has an event handler, it should remain unchanged", () => {
+    it("When only defaultOptions has an event handler, it should remain unchanged", () => {
       const handler = vi.fn();
 
       const defaultOptions = {
@@ -65,7 +65,7 @@ describe("mergeEventHandlers", () => {
       expect(result.onClick).toBe(handler);
     });
 
-    test("Only fetchOpts with event handlers should be copied to defaultOptions.", () => {
+    it("Only fetchOpts with event handlers should be copied to defaultOptions.", () => {
       const handler = vi.fn();
 
       const defaultOptions = {
@@ -83,7 +83,7 @@ describe("mergeEventHandlers", () => {
       expect(result.onRetry).toBe(handler);
     });
 
-    test("When defaultOptions has a non-function value, it should be overridden by the function in fetchOpts", () => {
+    it("When defaultOptions has a non-function value, it should be overridden by the function in fetchOpts", () => {
       const handler = vi.fn();
 
       const defaultOptions = {
@@ -104,7 +104,7 @@ describe("mergeEventHandlers", () => {
   });
 
   describe("Event name recognition", () => {
-    test.each`
+    it.each`
       eventName       | shouldMatch
       ${"onSuccess"}  | ${true}
       ${"onClick"}    | ${true}
@@ -134,7 +134,7 @@ describe("mergeEventHandlers", () => {
   });
 
   describe("Complex scenarios", () => {
-    test("Mixed event handler scenarios", () => {
+    it("Mixed event handler scenarios", () => {
       const callLog: string[] = [];
 
       const defaultOptions = {
@@ -152,31 +152,31 @@ describe("mergeEventHandlers", () => {
       };
 
       const result = mergeEventHandlers(defaultOptions, fetchOpts);
-      // Test merged event handlers
+      // it merged event handlers
       result.onSuccess();
       expect(callLog).toEqual(["default-success", "fetch-success"]);
 
-      // Test event handlers only in defaultOptions
+      // it event handlers only in defaultOptions
       callLog.length = 0;
       result.onError();
       expect(callLog).toEqual(["default-error"]);
 
-      // Test event handlers only in fetchOpts
+      // it event handlers only in fetchOpts
       callLog.length = 0;
       result.onComplete();
       expect(callLog).toEqual(["fetch-complete"]);
 
-      // Test event handlers only in fetchOpts
+      // it event handlers only in fetchOpts
       callLog.length = 0;
       result.onRetry();
       expect(callLog).toEqual(["fetch-retry"]);
 
-      // Test non-event properties remain unchanged
+      // it non-event properties remain unchanged
       expect(result.normalProp).toBe("keep me");
       expect(result.anotherProp).toBeUndefined();
     });
 
-    test("Empty object handling", () => {
+    it("Empty object handling", () => {
       const result1 = mergeEventHandlers({}, {});
       expect(result1).toEqual({});
 
@@ -188,17 +188,16 @@ describe("mergeEventHandlers", () => {
       expect(result3.onSuccess).toBe(handler);
     });
 
-    // test("函数返回值应该是修改后的 defaultOptions", () => {
-    //   const defaultOptions = { onSuccess: vi.fn() };
-    //   const fetchOpts = { onError: vi.fn() };
+    it("The return value should be the new modified object", () => {
+      const defaultOptions = { onSuccess: vi.fn() };
+      const fetchOpts = { onError: vi.fn() };
 
-    //   const result = mergeEventHandlers(defaultOptions, fetchOpts);
+      const result = mergeEventHandlers(defaultOptions, fetchOpts);
+      expect(result).not.toBe(defaultOptions); // should not return the same object reference
+      expect(result.onError).toBe(fetchOpts.onError);
+    });
 
-    //   expect(result).toBe(defaultOptions); // 应该返回同一个对象引用
-    //   expect(result.onError).toBe(fetchOpts.onError);
-    // });
-
-    // test("异步事件处理器", async () => {
+    // it("异步事件处理器", async () => {
     //   const results: string[] = [];
 
     //   const defaultOptions = {
