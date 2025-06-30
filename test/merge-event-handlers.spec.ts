@@ -176,17 +176,17 @@ describe("mergeEventHandlers", () => {
       expect(result.anotherProp).toBeUndefined();
     });
 
-    // test("空对象处理", () => {
-    //   const result1 = mergeEventHandlers({}, {});
-    //   expect(result1).toEqual({});
+    test("Empty object handling", () => {
+      const result1 = mergeEventHandlers({}, {});
+      expect(result1).toEqual({});
 
-    //   const handler = vi.fn();
-    //   const result2 = mergeEventHandlers({}, { onSuccess: handler });
-    //   expect(result2.onSuccess).toBe(handler);
+      const handler = vi.fn();
+      const result2 = mergeEventHandlers({}, { onSuccess: handler });
+      expect(result2.onSuccess).toBe(handler);
 
-    //   const result3 = mergeEventHandlers({ onSuccess: handler }, {});
-    //   expect(result3.onSuccess).toBe(handler);
-    // });
+      const result3 = mergeEventHandlers({ onSuccess: handler }, {});
+      expect(result3.onSuccess).toBe(handler);
+    });
 
     // test("函数返回值应该是修改后的 defaultOptions", () => {
     //   const defaultOptions = { onSuccess: vi.fn() };
