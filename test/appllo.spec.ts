@@ -69,10 +69,17 @@ describe("apollo", () => {
     );
 
     expect(result).toEqual({
+      parseRejected: expect.any(Function),
+      reject: expect.any(Function),
+      retry: {
+        attempts: 0,
+        delay: 0,
+        when: expect.any(Function),
+      },
+      serializeParams: expect.any(Function),
       baseUrl: "https://api.example.com",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer 1234567890",
       },
       method: "GET",
       params: {
@@ -92,9 +99,8 @@ describe("Should receive the apollo arguments (up to 3)", () => {
     expectedInput       | expectedOptions         | expectedCtx
     ${baseUrl}          | ${{ method: "DELETE" }} | ${{ is: "ctx" }}
     ${new URL(baseUrl)} | ${{ method: "DELETE" }} | ${"context"}
-    ${baseUrl}          | ${{ method: "POST" }} | ${{ name: "John", age: 30 }}
+    ${baseUrl}          | ${{ method: "POST" }}   | ${{ name: "John", age: 30 }}
   `("test case %#", async ({ expectedInput, expectedOptions, expectedCtx }) => {
-
     const fetch: MinFetchFn = async (input, fetchOpts, ctx) => {
       expect(input).toBe(expectedInput);
       expect(fetchOpts).toEqual(expectedOptions);
@@ -114,13 +120,22 @@ describe("Should receive the apollo arguments (up to 3)", () => {
         parseResponse: expectedOptions.parseResponse,
         accessToken: "123",
         body: expectedCtx,
-      }
-    }
+      };
+    };
 
-    const api = apollo(fetch, defaultOptions)
-    const result = await api(expectedInput, expectedOptions, expectedCtx)
+    const api = apollo(fetch, defaultOptions);
+    const result = await api(expectedInput, expectedOptions, expectedCtx);
 
     expect(result).toEqual({
+      parseRejected: expect.any(Function),
+      reject: expect.any(Function),
+      retry: {
+        attempts: 0,
+        delay: 0,
+        when: expect.any(Function),
+      },
+      serializeParams: expect.any(Function),
+      serializeBody: expect.any(Function),
       baseUrl: expectedInput,
       method: expectedOptions.method,
       headers: {
@@ -131,7 +146,7 @@ describe("Should receive the apollo arguments (up to 3)", () => {
       parseResponse: undefined,
       accessToken: "123",
       body: expectedCtx,
-    }); 
+    });
   });
 });
 
@@ -141,7 +156,7 @@ describe("Do not pass in the default options function", () => {
     expectedInput       | expectedOptions         | expectedCtx
     ${baseUrl}          | ${{ method: "DELETE" }} | ${{ is: "ctx" }}
     ${new URL(baseUrl)} | ${{ method: "DELETE" }} | ${"context"}
-    ${baseUrl}          | ${{ method: "POST" }} | ${{ name: "John", age: 30 }}
+    ${baseUrl}          | ${{ method: "POST" }}   | ${{ name: "John", age: 30 }}
   `("test case %#", async ({ expectedInput, expectedOptions, expectedCtx }) => {
     const fetch: MinFetchFn = async (input, fetchOpts, ctx) => {
       expect(input).toBe(expectedInput);
@@ -150,9 +165,21 @@ describe("Do not pass in the default options function", () => {
       return Response.json({});
     };
 
-    const api = apollo(fetch)
-    const result = await api(expectedInput, expectedOptions, expectedCtx)
-    // check if it is an empty object
-    expect(result).toEqual({});
-  })
-})
+    const api = apollo(fetch);
+    const result = await api(expectedInput, expectedOptions, expectedCtx);
+
+    expect(result).toEqual({
+      parseRejected: expect.any(Function),
+      parseResponse: expect.any(Function),
+      reject: expect.any(Function),
+      retry: {
+        attempts: 0,
+        delay: 0,
+        when: expect.any(Function),
+      },
+      serializeBody: expect.any(Function),
+      serializeParams: expect.any(Function),
+      method: expectedOptions.method,
+    });
+  });
+});

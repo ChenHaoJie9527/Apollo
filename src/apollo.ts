@@ -26,8 +26,9 @@ export const apollo = <
   ) => MaybePromise<TDefaultOptions> = () => emptyOptions
 ): Apollo<TFetch, TDefaultOptions> => {
   return async (input, fetchOpts, ctx) => {
-    let defaultOptions = await getDefaultOptions(input, fetchOpts, ctx);
+    const defaultOptions = await getDefaultOptions(input, fetchOpts, ctx);
 
+    // 1. Merge all base properties first (including fallbackOptions, defaultOptions, fetchOpts)
     const mergedOptions = mergeOptions(
       fallbackOptions,
       defaultOptions,
@@ -35,11 +36,12 @@ export const apollo = <
       emptyOptions
     );
 
-    defaultOptions = mergeEventHandlers(
-      defaultOptions,
+    // 2. Then handle the special merging logic of event handlers on the merged result
+    const finalOptions = mergeEventHandlers(
+      mergedOptions,
       fetchOpts
     ) as TDefaultOptions;
 
-    return defaultOptions;
+    return finalOptions;
   };
 };
