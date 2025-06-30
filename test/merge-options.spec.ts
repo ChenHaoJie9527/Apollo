@@ -205,5 +205,7 @@ describe("retry property deep merge", () => {
       c: 3,
       d: {},
     });
+
+    expect(result).not.toHaveProperty("retry");
   });
 });
