@@ -97,7 +97,6 @@ describe("retry property deep merge", () => {
     };
 
     const result = mergeOptions(opt1, opt2, opt3, opt4);
-    console.log("result =>", result);
     expect(result).toEqual({
       retry: {
         attempts: 9,
