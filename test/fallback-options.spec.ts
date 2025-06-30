@@ -1,8 +1,8 @@
-import { describe, expect, test } from "vitest";
+import { describe, expect, it } from "vitest";
 import { fallbackOptions, ResponseError } from "../src/utils";
 
 describe("serializeParams", () => {
-  test.each`
+  it.each`
     params                                                                         | output
     ${{ key1: true, key2: false }}                                                 | ${"key1=true&key2=false"}
     ${{ key1: "123", key2: 1, key3: undefined, key4: null }}                       | ${"key1=123&key2=1&key4=null"}
@@ -19,7 +19,7 @@ describe("serializeParams", () => {
 });
 
 describe("serializeBody", () => {
-  test("test case serializeBody", () => {
+  it("test case serializeBody", () => {
     expect(fallbackOptions.serializeBody({ key1: true, key2: false })).toBe(
       '{"key1":true,"key2":false}'
     );
@@ -35,7 +35,7 @@ describe("serializeBody", () => {
 });
 
 describe("parseResponse", () => {
-  test.each`
+  it.each`
     response                          | output
     ${new Response(null)}             | ${null}
     ${new Response()}                 | ${null}
@@ -54,7 +54,7 @@ describe("parseResponse", () => {
 });
 
 describe("parseRejected", () => {
-  test.each`
+  it.each`
     response              | output
     ${new Response(null)} | ${null}
     ${new Response()}     | ${null}

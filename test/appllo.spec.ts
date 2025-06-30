@@ -1,14 +1,14 @@
-import { describe, expect, test, it } from "vitest";
+import { describe, expect, it } from "vitest";
 import { apollo } from "../src/apollo";
 import type { DefaultOptions, MinFetchFn } from "../src/types";
 
 describe("apollo", () => {
-  // 判断apollo函数是否存在
+  // check if apollo function is defined
   it("should be defined", () => {
     expect(apollo).toBeDefined();
   });
 
-  // 判断apollo函数的第一个入参是否符合泛型T
+  // check if the first parameter of apollo function is compatible with the generic T
   it("should accept a fetch function matching MinFetchFn", () => {
     const fetch: MinFetchFn = (_url: string) =>
       Promise.resolve(Response.json({}));
@@ -16,7 +16,7 @@ describe("apollo", () => {
     expect(api).toBeDefined();
   });
 
-  // 测试 getDefaultOptions 是否被调用，返回值是否正确
+  // check if getDefaultOptions is called and the return value is correct
   it("should call getDefaultOptions and return its result", async () => {
     const myFetch: MinFetchFn = async (
       input,
@@ -88,7 +88,7 @@ describe("apollo", () => {
 
 describe("Should receive the apollo arguments (up to 3)", () => {
   const baseUrl = "https://example.com";
-  test.each`
+  it.each`
     expectedInput       | expectedOptions         | expectedCtx
     ${baseUrl}          | ${{ method: "DELETE" }} | ${{ is: "ctx" }}
     ${new URL(baseUrl)} | ${{ method: "DELETE" }} | ${"context"}
@@ -137,7 +137,7 @@ describe("Should receive the apollo arguments (up to 3)", () => {
 
 describe("Do not pass in the default options function", () => {
   const baseUrl = "https://example.com";
-  test.each`
+  it.each`
     expectedInput       | expectedOptions         | expectedCtx
     ${baseUrl}          | ${{ method: "DELETE" }} | ${{ is: "ctx" }}
     ${new URL(baseUrl)} | ${{ method: "DELETE" }} | ${"context"}
@@ -152,7 +152,7 @@ describe("Do not pass in the default options function", () => {
 
     const api = apollo(fetch)
     const result = await api(expectedInput, expectedOptions, expectedCtx)
-    // 判断是否为空对象
+    // check if it is an empty object
     expect(result).toEqual({});
   })
 })

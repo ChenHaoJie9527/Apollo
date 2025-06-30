@@ -1,9 +1,9 @@
-import { describe, expect, test } from "vitest";
+import { describe, expect, test, it } from "vitest";
 import { mergeOptions } from "../src/utils/merge-options";
 
 describe("mergeOptions", () => {
   describe("Basic object consolidation", () => {
-    test("Should merge four objects in order (later overrides earlier)", () => {
+    it("Should merge four objects in order (later overrides earlier)", () => {
       const opt1 = { a: 1, b: "first", shared: "from-opt1" };
       const opt2 = { b: "second", c: true, shared: "from-opt2" };
       const opt3 = { c: false, d: [1, 2, 3], shared: "from-opt3" };
@@ -20,7 +20,7 @@ describe("mergeOptions", () => {
       });
     });
 
-    test("Should handle undefined and null values", () => {
+    it("Should handle undefined and null values", () => {
       const opt1 = { a: 1, b: "keep", c: "will-be-null" };
       const opt2 = { a: undefined, b: null, c: null };
       const opt3 = { d: "new" };
@@ -35,7 +35,7 @@ describe("mergeOptions", () => {
       });
     });
 
-    test("Should handle empty objects", () => {
+    it("Should handle empty objects", () => {
       const result1 = mergeOptions({}, {}, {}, {});
       expect(result1).toEqual({});
 
@@ -46,7 +46,7 @@ describe("mergeOptions", () => {
       expect(result3).toEqual({ a: 1 });
     });
 
-    test("Should handle different data types", () => {
+    it("Should handle different data types", () => {
       const opt1 = { value: "string" };
       const opt2 = { value: 123 };
       const opt3 = { value: true };
@@ -61,7 +61,7 @@ describe("mergeOptions", () => {
 });
 
 describe("retry property deep merge", () => {
-  test("should deep merge all objects' retry property", () => {
+  it("should deep merge all objects' retry property", () => {
     const opt1 = {
       retry: {
         attempts: 3,
@@ -109,7 +109,7 @@ describe("retry property deep merge", () => {
       other: "value4",
     });
   });
-  test("should handle partial objects with retry property", () => {
+  it("should handle partial objects with retry property", () => {
     const opt1 = {
       normal: "prop1",
     };
@@ -136,7 +136,7 @@ describe("retry property deep merge", () => {
       },
     });
   });
-  test("should handle retry property as undefined or null", () => {
+  it("should handle retry property as undefined or null", () => {
     const opt1 = {
       retry: {
         attempts: 3,
@@ -164,7 +164,7 @@ describe("retry property deep merge", () => {
     });
   });
 
-  test("should handle non-object retry values - show actual behavior", () => {
+  it("should handle non-object retry values - show actual behavior", () => {
     const opt1 = {
       retry: 3,
     };
@@ -184,7 +184,7 @@ describe("retry property deep merge", () => {
     });
   });
 
-  test("if there is no retry property, an empty retry object should not be added", () => {
+  it("if there is no retry property, an empty retry object should not be added", () => {
     const opt1 = {
       a: 1,
     };
@@ -210,7 +210,7 @@ describe("retry property deep merge", () => {
 });
 
 describe("Complex scenarios", () => {
-  test("should handle deeply nested objects (except retry)", () => {
+  it("should handle deeply nested objects (except retry)", () => {
     const opt1 = {
       nested: {
         a: 1,
@@ -251,7 +251,7 @@ describe("Complex scenarios", () => {
     });
   });
 
-  test("should handle large number of properties", () => {
+  it("should handle large number of properties", () => {
     const createLargeObject = (prefix: string, count: number) => {
       const obj: Record<string, string> = {};
       for (let i = 0; i < count; i++) {
@@ -276,7 +276,7 @@ describe("Complex scenarios", () => {
 });
 
 describe("Edge cases", () => {
-  test("should handle circular references (within allowed range)", () => {
+  it("should handle circular references (within allowed range)", () => {
     const obj1: Record<string, any> = {
       a: 1,
     };
@@ -290,7 +290,7 @@ describe("Edge cases", () => {
       mergeOptions(obj1, obj2, {}, {});
     }).not.toThrow();
   });
-  test("should handle property descriptors", () => {
+  it("should handle property descriptors", () => {
     const obj1: Record<string, any> = {};
     const obj2: Record<string, any> = {};
 
@@ -311,7 +311,7 @@ describe("Edge cases", () => {
 });
 
 describe("Practical recommendations for use", () => {
-  test("Best practice: retry property should always be an object or undefined", () => {
+  it("Best practice: retry property should always be an object or undefined", () => {
     // Show recommended usage
     const baseConfig = {
       retry: {
