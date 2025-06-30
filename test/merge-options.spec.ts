@@ -289,24 +289,57 @@ describe("Edge cases", () => {
 
     expect(() => {
       mergeOptions(obj1, obj2, {}, {});
-    }).not.toThrow()
+    }).not.toThrow();
   });
   test("should handle property descriptors", () => {
-    const obj1: Record<string, any> = {}
-    const obj2: Record<string, any> = {}
+    const obj1: Record<string, any> = {};
+    const obj2: Record<string, any> = {};
 
     Object.defineProperty(obj1, "readOnly", {
       value: "original",
       writable: false,
-      enumerable: true
-    })
+      enumerable: true,
+    });
 
     Object.defineProperty(obj2, "readOnly", {
       value: "updated",
       writable: false,
-      enumerable: true
-    })
-    const result = mergeOptions(obj1, obj2, {}, {})
-    expect(result.readOnly).toBe("updated")
-  })
+      enumerable: true,
+    });
+    const result = mergeOptions(obj1, obj2, {}, {});
+    expect(result.readOnly).toBe("updated");
+  });
+});
+
+describe("Practical recommendations for use", () => {
+  test("Best practice: retry property should always be an object or undefined", () => {
+    // Show recommended usage
+    const baseConfig = {
+      retry: {
+        attempts: 3,
+        delay: 1000,
+      },
+    };
+    const userConfig = {
+      retry: {
+        attempts: 5,
+      },
+    };
+    const envOverride = {};
+    const finalOverride = {
+      retry: {
+        delay: 2000,
+      },
+    };
+    const result = mergeOptions(
+      baseConfig,
+      userConfig,
+      envOverride,
+      finalOverride
+    );
+    expect(result.retry).toEqual({
+      attempts: 5,
+      delay: 2000,
+    });
+  });
 });
