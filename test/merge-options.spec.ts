@@ -144,16 +144,16 @@ describe("retry property deep merge", () => {
       },
     };
     const opt2 = {
-      retry: undefined
-    }
+      retry: undefined,
+    };
     const opt3 = {
       retry: {
         delay: 1000,
-      }
-    }
+      },
+    };
     const opt4 = {
-      retry: null
-    }
+      retry: null,
+    };
 
     const result = mergeOptions(opt1, opt2, opt3, opt4);
 
@@ -161,8 +161,8 @@ describe("retry property deep merge", () => {
       retry: {
         attempts: 3,
         delay: 1000,
-      }
-    })
+      },
+    });
   });
 
   test("should handle non-object retry values - show actual behavior", () => {
@@ -173,15 +173,37 @@ describe("retry property deep merge", () => {
       retry: "not-object",
     };
     const opt3 = {
-      retry: [1, 2, 3]
-    }
+      retry: [1, 2, 3],
+    };
     const opt4 = {
-      delay: 1000
-    }
+      delay: 1000,
+    };
     const result = mergeOptions(opt1, opt2, opt3, opt4);
     expect(result).toEqual({
       retry: [1, 2, 3],
       delay: 1000,
-    })
-  })
+    });
+  });
+
+  test("if there is no retry property, an empty retry object should not be added", () => {
+    const opt1 = {
+      a: 1,
+    };
+    const opt2 = {
+      b: 2,
+    };
+    const opt3 = {
+      c: 3,
+    };
+    const opt4 = {
+      d: {},
+    };
+    const result = mergeOptions(opt1, opt2, opt3, opt4);
+    expect(result).toEqual({
+      a: 1,
+      b: 2,
+      c: 3,
+      d: {},
+    });
+  });
 });
