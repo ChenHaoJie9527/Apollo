@@ -137,4 +137,31 @@ describe("retry property deep merge", () => {
       },
     });
   });
+  test("should handle retry property as undefined or null", () => {
+    const opt1 = {
+      retry: {
+        attempts: 3,
+      },
+    };
+    const opt2 = {
+      retry: undefined
+    }
+    const opt3 = {
+      retry: {
+        delay: 1000,
+      }
+    }
+    const opt4 = {
+      retry: null
+    }
+
+    const result = mergeOptions(opt1, opt2, opt3, opt4);
+
+    expect(result).toEqual({
+      retry: {
+        attempts: 3,
+        delay: 1000,
+      }
+    })
+  });
 });
