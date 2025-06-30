@@ -251,4 +251,27 @@ describe("Complex scenarios", () => {
       a: 1,
     });
   });
+
+  test("should handle large number of properties", () => {
+    const createLargeObject = (prefix: string, count: number) => {
+      const obj: Record<string, string> = {};
+      for (let i = 0; i < count; i++) {
+        obj[`${prefix}_${i}`] = `value_${i}`;
+      }
+      return obj;
+    }
+    const opt1 = createLargeObject("opt1", 100)
+    const opt2 = createLargeObject("opt2", 100)
+    const opt3 = createLargeObject("opt3", 100)
+    const opt4 = createLargeObject("opt4", 100)
+
+    const result = mergeOptions(opt1, opt2, opt3, opt4)
+    
+    // Verify all properties exist
+    expect(Object.keys(result)).toHaveLength(400)
+
+    // Verify priority
+    expect(result.opt1_0).toBe('value_0')
+    expect(result.opt4_99).toBe('value_99')
+  })
 });
