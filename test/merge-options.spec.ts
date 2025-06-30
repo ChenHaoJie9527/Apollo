@@ -291,5 +291,22 @@ describe("Edge cases", () => {
       mergeOptions(obj1, obj2, {}, {});
     }).not.toThrow()
   });
+  test("should handle property descriptors", () => {
+    const obj1: Record<string, any> = {}
+    const obj2: Record<string, any> = {}
 
+    Object.defineProperty(obj1, "readOnly", {
+      value: "original",
+      writable: false,
+      enumerable: true
+    })
+
+    Object.defineProperty(obj2, "readOnly", {
+      value: "updated",
+      writable: false,
+      enumerable: true
+    })
+    const result = mergeOptions(obj1, obj2, {}, {})
+    expect(result.readOnly).toBe("updated")
+  })
 });
