@@ -14,7 +14,7 @@ type Unknown = {};
  * 1. 收到服务器响应，但响应时5xx错误，在这种情况下， response 字段会是一个Response对象，error字段可能是undefined
  * 2. 请求未发出或者请求未嫌贵那个，网络中断，DNS解析失败，等等，在这种情况下， response 字段是 undefined，error字段会是一个{}对象
  */
-type RetryContext =
+export type RetryContext =
   | {
       response: Response;
       error: undefined;
