@@ -145,7 +145,10 @@ describe("Should receive the apollo arguments (up to 3)", () => {
       credentials: undefined,
       parseResponse: undefined,
       accessToken: "123",
-      body: typeof expectedCtx === "object" ? JSON.stringify(expectedCtx) : expectedCtx,
+      body:
+        typeof expectedCtx === "object"
+          ? JSON.stringify(expectedCtx)
+          : expectedCtx,
     });
   });
 });
@@ -182,5 +185,139 @@ describe("Do not pass in the default options function", () => {
       headers: {},
       method: expectedOptions.method,
     });
+  });
+});
+
+describe("withTimeout integration", () => {
+  it("should handle timeout in finalOptions", async () => {
+    const myFetch: MinFetchFn = async (
+      input,
+      fetchOpts,
+      ctx
+    ): Promise<Response> => {
+      // Here we don't actually execute fetch, because we are only testing the options processing of apollo
+      return Response.json({});
+    };
+
+    // getDefaultOptions returns a configuration containing timeout
+    const getDefaultOptions = (): DefaultOptions<typeof myFetch, any, any> => {
+      return {
+        method: "GET",
+        timeout: 5000, // 5 seconds timeout
+        headers: {
+          "Content-Type": "application/json",
+        },
+        parseResponse: async (response) => {
+          return await response.json();
+        },
+        serializeBody: (body) => {
+          return JSON.stringify(body);
+        },
+      };
+    };
+
+    const api = apollo(myFetch, getDefaultOptions);
+    const result = await api("/test", {});
+    // Verify that the result contains the signal property
+    expect(result).toHaveProperty("signal");
+
+    // If the environment supports AbortSignal.timeout and AbortSignal.any, signal should not be undefined
+    // If not supported, signal should be undefined (fallback behavior)
+    if ("any" in AbortSignal && "timeout" in AbortSignal) {
+      expect(result.signal).toBeDefined();
+      expect(result.signal).toBeInstanceOf(AbortSignal);
+    } else {
+      // In unsupported environments, withTimeout should return undefined
+      expect(result.signal).toBeUndefined();
+    }
+
+    // Verify that other basic properties still exist
+    expect(result).toEqual(
+      expect.objectContaining({
+        method: "GET",
+        timeout: 5000,
+        headers: expect.any(Object),
+        parseResponse: expect.any(Function),
+        serializeBody: expect.any(Function),
+        signal: expect.anything(), // signal may be AbortSignal or undefined
+      })
+    );
+  });
+
+  it("should handle timeout with user provided signal", async () => {
+    const myFetch: MinFetchFn = async (
+      input,
+      fetchOpts,
+      ctx
+    ): Promise<Response> => {
+      return Response.json({});
+    };
+
+    const getDefaultOptions = (): DefaultOptions<typeof myFetch, any, any> => {
+      return {
+        method: "POST",
+        timeout: 3000, // 3 seconds timeout
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+    };
+
+    // User provided AbortController
+    const userController = new AbortController();
+
+    const api = apollo(myFetch, getDefaultOptions);
+    const result = await api("/test", {
+      signal: userController.signal,
+      body: { test: "data" },
+    });
+
+    // Verify the result
+    expect(result).toHaveProperty("signal");
+    expect(result).toHaveProperty("timeout", 3000);
+
+    // Verify that the body is correctly serialized
+    expect(result.body).toBe('{"test":"data"}');
+
+    // Verify that Content-Type is automatically added (because the body is serialized)
+    expect(result.headers).toEqual(
+      expect.objectContaining({
+        "content-type": "application/json",
+      })
+    );
+  });
+
+  it("should not add signal when timeout is not provided", async () => {
+    const myFetch: MinFetchFn = async (
+      input,
+      fetchOpts,
+      ctx
+    ): Promise<Response> => {
+      return Response.json({});
+    };
+
+    // getDefaultOptions does not contain timeout
+    const getDefaultOptions = (): DefaultOptions<typeof myFetch, any, any> => {
+      return {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+    };
+
+    const api = apollo(myFetch, getDefaultOptions);
+    const result = await api("/test", {});
+
+    // When there is no timeout, signal should be undefined
+    expect(result.signal).toBeUndefined();
+
+    // Verify that other properties are normal
+    expect(result).toEqual(
+      expect.objectContaining({
+        method: "GET",
+        headers: expect.any(Object),
+      })
+    );
   });
 });

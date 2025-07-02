@@ -6,8 +6,8 @@ import type {
   MaybePromise,
   MinFetchFn,
 } from "./types";
-import type { DistributiveOmit } from "./types/DistributiveOmit";
-import type { RetryContext } from "./types/RetryOptions";
+// import type { DistributiveOmit } from "./types/DistributiveOmit";
+// import type { RetryContext } from "./types/RetryOptions";
 import {
   fallbackOptions,
   mergeEventHandlers,
@@ -78,9 +78,12 @@ export const apollo = <
 
     // do {
     //   finalOptions.signal = withTimeout(finalOptions.signal, finalOptions.timeout)
-      
-    // } while (true)
 
+    // } while (true)
+    finalOptions.signal = withTimeout(
+      finalOptions.signal,
+      finalOptions.timeout
+    );
 
     return finalOptions;
   };
