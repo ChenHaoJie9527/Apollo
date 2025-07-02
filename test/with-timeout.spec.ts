@@ -39,5 +39,16 @@ describe("withTimeout", () => {
       // In unsupported environments, the original signal should be returned
       expect(result).toBe(controller.signal);
     });
+
+    it("should handle environments without AbortSignal.timeout support", () => {
+      // Simulate an environment without AbortSignal.timeout support
+      delete (AbortSignal as any).timeout;
+
+      const controller = new AbortController();
+      const result = withTimeout(controller.signal, 1000);
+      // In unsupported environments, the original signal should be returned
+      expect(result).toBe(controller.signal);
+    });
+
   });
 });
