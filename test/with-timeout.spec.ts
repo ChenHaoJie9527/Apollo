@@ -98,5 +98,18 @@ describe("withTimeout", () => {
       ]);
       expect(result).toBeDefined();
     });
+
+    it("should handle only user signal (no timeout)", () => {
+      const controller = new AbortController();
+      const anySpy = vi.spyOn(AbortSignal, "any");
+      const timeoutSpy = vi.spyOn(AbortSignal, "timeout");
+
+      withTimeout(controller.signal);
+
+      // Determine that the method has not been called
+      expect(timeoutSpy).not.toHaveBeenCalled();
+      // Determines that the method was called and the passed parameter is controller.signal
+      expect(anySpy).toHaveBeenCalledWith([controller.signal]);
+    });
   });
 });
