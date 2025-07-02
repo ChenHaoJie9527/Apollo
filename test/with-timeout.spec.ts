@@ -188,5 +188,19 @@ describe("withTimeout", () => {
       await new Promise((resolve) => setTimeout(resolve, 150));
       expect(signal?.aborted).toBe(true);
     }, 5000);
+
+    it("should abort when user signal is aborted", async () => {
+      if (!AbortSignal.timeout || !AbortSignal.any) {
+        return;
+      }
+
+      const controller = new AbortController();
+      const signal = withTimeout(controller.signal, 1000);
+      expect(signal?.aborted).toBe(false);
+      
+      controller.abort();
+
+      expect(signal?.aborted).toBe(true);
+    }, 5000);
   });
 });
