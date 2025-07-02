@@ -61,4 +61,42 @@ describe("withTimeout", () => {
       expect(result).toBe(controller.signal);
     });
   });
+
+  describe("Signal composition in supported environments", () => {
+    beforeEach(() => {
+      // 保证模拟的方法是存在的
+      if (!AbortSignal.any) {
+        (AbortSignal as any).any = vi
+          .fn()
+          .mockImplementation((signals: AbortSignal[]) => {
+            // 模拟：返回第一个信号
+            return signals[0];
+          });
+      }
+
+      if (!AbortSignal.timeout) {
+        (AbortSignal as any).timeout = vi
+          .fn()
+          .mockImplementation((ms: number) => {
+            const controller = new AbortController();
+            setTimeout(() => controller.abort(), ms);
+            return controller.signal;
+          });
+      }
+    });
+    it("should combine user signal and timeout signal", () => {
+      const controller = new AbortController();
+      const anySpy = vi.spyOn(AbortSignal, "any");
+      const timeoutSpy = vi.spyOn(AbortSignal, "timeout");
+
+      const result = withTimeout(controller.signal, 1000);
+
+      expect(timeoutSpy).toHaveBeenCalledWith(1000);
+      expect(anySpy).toHaveBeenCalledWith([
+        controller.signal,
+        expect.any(AbortSignal),
+      ]);
+      expect(result).toBeDefined();
+    });
+  });
 });
