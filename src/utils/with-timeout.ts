@@ -6,8 +6,8 @@
  * @returns Merged signal
  */
 export const withTimeout = (userSignal?: AbortSignal, timeoutMs?: number) => {
-  // 检查浏览器兼容性
-  if (isAbortSignalCompositionSupported()) {
+  // Check for browser compatibility - if it is not supported, simply return the original signal
+  if (!isAbortSignalCompositionSupported()) {
     return userSignal;
   }
 
@@ -39,7 +39,7 @@ function buildSignalArray(userSignal?: AbortSignal, timeoutMs?: number) {
     signals.push(userSignal);
   }
 
-  if (timeoutMs && signals.length > 0) {
+  if (timeoutMs && timeoutMs > 0) {
     signals.push(AbortSignal.timeout(timeoutMs));
   }
 

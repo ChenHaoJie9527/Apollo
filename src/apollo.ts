@@ -71,15 +71,15 @@ export const apollo = <
 
     finalOptions.headers = currentHeaders;
 
-    let attempt = 0;
-    let request: Request;
+    // let attempt = 0;
+    // let request: Request;
 
-    const outcome = {} as DistributiveOmit<RetryContext, "request">;
+    // const outcome = {} as DistributiveOmit<RetryContext, "request">;
 
-    do {
-      finalOptions.signal = withTimeout(finalOptions.signal, finalOptions.timeout)
+    // do {
+    //   finalOptions.signal = withTimeout(finalOptions.signal, finalOptions.timeout)
       
-    } while (true)
+    // } while (true)
 
 
     return finalOptions;
