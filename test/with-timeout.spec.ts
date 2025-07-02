@@ -153,4 +153,23 @@ describe("withTimeout", () => {
       expect(anySpy).toHaveBeenCalled();
     });
   });
+
+  describe("Type safety", () => {
+    it("should return AbortSignal or undefined", () => {
+      const result1 = withTimeout();
+      const result2 = withTimeout(new AbortController().signal);
+      const result3 = withTimeout(undefined, 1000);
+
+      // TypeScript type check - these should compile
+      expect(
+        typeof result1 === "undefined" || result1 instanceof AbortSignal
+      ).toBe(true);
+      expect(
+        typeof result2 === "undefined" || result2 instanceof AbortSignal
+      ).toBe(true);
+      expect(
+        typeof result3 === "undefined" || result3 instanceof AbortSignal
+      ).toBe(true);
+    });
+  });
 });
