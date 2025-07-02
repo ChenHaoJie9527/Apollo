@@ -172,4 +172,21 @@ describe("withTimeout", () => {
       ).toBe(true);
     });
   });
+
+  describe("Real timeout behavior (integration test)", () => {
+    it("should actually abort after timeout", async () => {
+      // Skip in unsupported environments
+      if (!AbortSignal.timeout || !AbortSignal.any) {
+        return;
+      }
+
+      const signal = withTimeout(undefined, 100); // 100ms timeout
+      console.log("signal1=>", signal);
+      expect(signal?.aborted).toBe(false);
+
+      // Wait for timeout to trigger
+      await new Promise((resolve) => setTimeout(resolve, 150));
+      expect(signal?.aborted).toBe(true);
+    }, 5000);
+  });
 });
