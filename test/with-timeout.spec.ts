@@ -132,5 +132,14 @@ describe("withTimeout", () => {
       // Zero timeout should be ignored
       expect(timeoutSpy).not.toHaveBeenCalled();
     });
+
+    it("should handle negative timeout", () => {
+      const controller = new AbortController();
+      const timeoutSpy = vi.spyOn(AbortSignal, "timeout");
+      withTimeout(controller.signal, -1000);
+
+      // Negative timeout should be ignored
+      expect(timeoutSpy).not.toHaveBeenCalled();
+    });
   });
 });
