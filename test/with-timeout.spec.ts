@@ -50,5 +50,15 @@ describe("withTimeout", () => {
       expect(result).toBe(controller.signal);
     });
 
+    it("should handle environments without both methods", () => {
+      // Simulate an environment without both methods
+      delete (AbortSignal as any).any;
+      delete (AbortSignal as any).timeout;
+
+      const controller = new AbortController();
+      const result = withTimeout(controller.signal, 1000);
+      // In unsupported environments, the original signal should be returned
+      expect(result).toBe(controller.signal);
+    });
   });
 });
