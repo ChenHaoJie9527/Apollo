@@ -30,7 +30,7 @@ export const toStreamable = async <T extends Request | Response>(
     reqOrRes
   );
 
-  return wrapWithNewStream(reqOrRes, monitoredStream, isResponse);
+  return wrapWithNewStream(reqOrRes, monitoredStream);
 };
 
 /**
