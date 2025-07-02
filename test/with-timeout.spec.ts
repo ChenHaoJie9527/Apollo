@@ -121,6 +121,16 @@ describe("withTimeout", () => {
       const result = withTimeout(undefined, 0);
       expect(result).toBeUndefined();
     });
-    
+  });
+
+  describe("Edge cases", () => {
+    it("should handle zero timeout", () => {
+      const controller = new AbortController();
+      const timeoutSpy = vi.spyOn(AbortSignal, "timeout");
+      withTimeout(controller.signal, 0);
+
+      // Zero timeout should be ignored
+      expect(timeoutSpy).not.toHaveBeenCalled();
+    });
   });
 });
