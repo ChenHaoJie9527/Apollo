@@ -141,5 +141,16 @@ describe("withTimeout", () => {
       // Negative timeout should be ignored
       expect(timeoutSpy).not.toHaveBeenCalled();
     });
+
+    it("should handle already aborted signal", () => {
+      const controller = new AbortController();
+      // Simulating a signal that has been terminated
+      controller.abort();
+      const anySpy = vi.spyOn(AbortSignal, "any");
+      withTimeout(controller.signal, 1000);
+
+      // Even if the signal has been terminated, it should still be combined normally
+      expect(anySpy).toHaveBeenCalled();
+    });
   });
 });
