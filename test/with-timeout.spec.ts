@@ -111,5 +111,16 @@ describe("withTimeout", () => {
       // Determines that the method was called and the passed parameter is controller.signal
       expect(anySpy).toHaveBeenCalledWith([controller.signal]);
     });
+
+    it("should return undefined when no signals provided", () => {
+      const result = withTimeout();
+      expect(result).toBeUndefined();
+    });
+
+    it("should return undefined when timeout is 0", () => {
+      const result = withTimeout(undefined, 0);
+      expect(result).toBeUndefined();
+    });
+    
   });
 });
