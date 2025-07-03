@@ -10,7 +10,7 @@ describe("apollo", () => {
 
   // check if the first parameter of apollo function is compatible with the generic T
   it("should accept a fetch function matching MinFetchFn", () => {
-    const fetch: MinFetchFn = (_url: string) =>
+    const fetch: MinFetchFn = (_url: Request) =>
       Promise.resolve(Response.json({}));
     const api = apollo(fetch, () => ({}));
     expect(api).toBeDefined();
@@ -56,7 +56,7 @@ describe("apollo", () => {
 
     const api = apollo(myFetch, getDefaultOptions);
     const result = await api(
-      "/users",
+      new Request("https://api.example.com/users"),
       {
         method: "GET",
         headers: {
@@ -217,7 +217,7 @@ describe("withTimeout integration", () => {
     };
 
     const api = apollo(myFetch, getDefaultOptions);
-    const result = await api("/test", {});
+    const result = await api(new Request("https://api.example.com/test"), {});
     // Verify that the result contains the signal property
     expect(result).toHaveProperty("signal");
 
@@ -267,7 +267,7 @@ describe("withTimeout integration", () => {
     const userController = new AbortController();
 
     const api = apollo(myFetch, getDefaultOptions);
-    const result = await api("/test", {
+    const result = await api(new Request("https://api.example.com/test"), {
       signal: userController.signal,
       body: { test: "data" },
     });
@@ -307,7 +307,7 @@ describe("withTimeout integration", () => {
     };
 
     const api = apollo(myFetch, getDefaultOptions);
-    const result = await api("/test", {});
+    const result = await api(new Request("https://api.example.com/test"), {});
 
     // When there is no timeout, signal should be undefined
     expect(result.signal).toBeUndefined();

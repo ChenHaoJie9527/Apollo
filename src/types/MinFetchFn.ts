@@ -6,7 +6,7 @@
  * @returns 响应Promise
  */
 export type MinFetchFn = (
-	input: string,
+	input: Request,
 	options?: any,
 	ctx?: any,
 ) => Promise<Response>;
