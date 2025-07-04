@@ -12,7 +12,6 @@ export const resolveUrl = (
 ): string => {
   // URL/String Conversion
   const inputStr = input instanceof URL ? input.href : input;
-
   // Safe URL construction, handling relative paths
   let parsedUrl: URL;
   try {

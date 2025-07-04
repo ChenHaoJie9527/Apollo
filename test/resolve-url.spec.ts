@@ -39,3 +39,17 @@ describe("URL input handling", () => {
     expect(mockSerializeParams).toHaveBeenCalledWith({});
   });
 });
+
+describe("absolute URL handling", () => {
+  it("should use absolute URL as-is regardless of base", () => {
+    const result = resolveUrl(
+      "https://base.com",
+      "https://example.com",
+      undefined,
+      undefined,
+      mockSerializeParams
+    );
+    expect(result).toBe("https://example.com");
+    expect(mockSerializeParams).toHaveBeenCalledWith({});
+  });
+});
