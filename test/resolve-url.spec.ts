@@ -26,4 +26,16 @@ describe("URL input handling", () => {
     expect(result).toBe("https://example.com/users");
     expect(mockSerializeParams).toHaveBeenCalledWith({});
   });
+  it("should handle URL object input", () => {
+    const url = new URL("https://example.com/users");
+    const result = resolveUrl(
+      "",
+      url,
+      undefined,
+      undefined,
+      mockSerializeParams
+    );
+    expect(result).toBe("https://example.com/users");
+    expect(mockSerializeParams).toHaveBeenCalledWith({});
+  });
 });
