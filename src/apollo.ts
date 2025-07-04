@@ -79,16 +79,16 @@ export const apollo = <
     // 追踪重试结果
     const outcome = {} as DistributiveOmit<RetryContext, "request">;
 
-    // do {
-    //   finalOptions.signal = withTimeout(
-    //     finalOptions.signal,
-    //     finalOptions.timeout
-    //   );
+    do {
+      finalOptions.signal = withTimeout(
+        finalOptions.signal,
+        finalOptions.timeout
+      );
 
-    //   await toStreamable(new Request(
-    //     input
-    //   ))
-    // } while (true);
+      await toStreamable(new Request(
+        input.url ? resolve
+      ))
+    } while (true);
     finalOptions.signal = withTimeout(
       finalOptions.signal,
       finalOptions.timeout
