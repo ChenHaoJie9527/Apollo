@@ -10,61 +10,64 @@ export const resolveUrl = (
   fetcherOptsParams: Params | undefined,
   serializeParams: SerializeParams
 ): string => {
-  // 修复：安全的URL/字符串转换
+  // URL/String Conversion
   const inputStr = input instanceof URL ? input.href : input;
-  
-  // 修复：安全的URL构造，处理相对路径
+
+  // Safe URL construction, handling relative paths
   let parsedUrl: URL;
   try {
-    // 尝试直接构造URL（绝对URL）
+    // Try direct URL construction (absolute URL)
     parsedUrl = new URL(inputStr);
   } catch {
-    // 如果失败，尝试使用base作为基础URL
+    // If failed, try using base as the base URL
     try {
-      parsedUrl = new URL(inputStr, base || 'http://localhost');
+      parsedUrl = new URL(inputStr, base || "http://localhost");
     } catch {
-      // 如果都失败，创建一个虚拟URL来解析参数
-      parsedUrl = new URL('http://localhost' + (inputStr.startsWith('/') ? inputStr : '/' + inputStr));
+      // If both fail, create a virtual URL to parse parameters
+      parsedUrl = new URL(
+        "http://localhost" +
+          (inputStr.startsWith("/") ? inputStr : "/" + inputStr)
+      );
     }
   }
 
-  // 提取URL中已存在的查询参数键
+  // Extract existing query parameter keys from the URL
   const existingParamKeys = Array.from(parsedUrl.searchParams.keys());
-  
-  // 安全地从defaultOptsParams中排除已存在的键
-  const filteredDefaultParams = defaultOptsParams 
+
+  // Safely exclude existing keys from defaultOptsParams
+  const filteredDefaultParams = defaultOptsParams
     ? omit(defaultOptsParams, existingParamKeys)
     : {};
 
-  // 序列化合并后的参数
+  // Serialize the merged parameters
   const qs = serializeParams({
     ...filteredDefaultParams,
     ...fetcherOptsParams,
   });
 
-  // 修复：更清晰的URL构建逻辑
+  // Fix: clearer URL construction logic
   let finalUrl: string;
-  
+
   if (/^https?:\/\//.test(inputStr)) {
-    // 绝对URL：直接使用
+    // Absolute URL: use directly
     finalUrl = inputStr;
   } else if (!base) {
-    // 无基础URL：直接使用输入
+    // No base URL: use input directly
     finalUrl = inputStr;
   } else if (!inputStr) {
-    // 空输入：使用基础URL
+    // Empty input: use base URL
     finalUrl = base;
   } else {
-    // 相对URL：拼接base和input
-    const cleanBase = base.replace(/\/+$/, ''); // 移除末尾的斜杠
-    const cleanInput = inputStr.replace(/^\/+/, ''); // 移除开头的斜杠
+    // Relative URL: concatenate base and input
+    const cleanBase = base.replace(/\/+$/, ""); // Remove trailing slash
+    const cleanInput = inputStr.replace(/^\/+/, ""); // Remove leading slash
     finalUrl = `${cleanBase}/${cleanInput}`;
   }
 
-  // 添加查询参数
+  // Add query parameters
   if (qs) {
-    const separator = finalUrl.includes('?') ? '&' : '?';
-    finalUrl += separator + qs.replace(/^\?/, '');
+    const separator = finalUrl.includes("?") ? "&" : "?";
+    finalUrl += separator + qs.replace(/^\?/, "");
   }
 
   return finalUrl;

@@ -24,7 +24,7 @@
 	},
 	"scripts": {
 		"lint": "biome check --write",
-		"build": "tsup",
+		"build": "tsup && knip && lint",
 		"test": "vitest run",
 		"knip": "knip",
 		"build-rolldown": "rolldown -c rolldown.config.ts"

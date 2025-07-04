@@ -6,8 +6,8 @@ import type {
   MaybePromise,
   MinFetchFn,
 } from "./types";
-import type { DistributiveOmit } from "./types/DistributiveOmit";
-import type { RetryContext } from "./types/RetryOptions";
+// import type { DistributiveOmit } from "./types/DistributiveOmit";
+// import type { RetryContext } from "./types/RetryOptions";
 import {
   fallbackOptions,
   mergeEventHandlers,
@@ -15,8 +15,9 @@ import {
   isJsonifiable,
   mergeHeaders,
   withTimeout,
-  toStreamable,
+  // toStreamable,
 } from "./utils";
+// import { resolveUrl } from "./utils/resolve-url";
 
 const emptyOptions = {} as any;
 
@@ -72,23 +73,22 @@ export const apollo = <
 
     finalOptions.headers = currentHeaders;
 
-    // 追踪重试次数
+    // // 追踪重试次数
     let attempt = 0;
-    // 追踪请求
+    // // 追踪请求
     let request: Request;
-    // 追踪重试结果
-    const outcome = {} as DistributiveOmit<RetryContext, "request">;
+    // // 追踪重试结果
+    // const outcome = {} as DistributiveOmit<RetryContext, "request">;
 
-    do {
-      finalOptions.signal = withTimeout(
-        finalOptions.signal,
-        finalOptions.timeout
-      );
+    // do {
+    //   finalOptions.signal = withTimeout(
+    //     finalOptions.signal,
+    //     finalOptions.timeout
+    //   );
 
-      await toStreamable(new Request(
-        input.url ? resolve
-      ))
-    } while (true);
+    //   await toStreamable(new Request(
+    //   ))
+    // } while (true);
     finalOptions.signal = withTimeout(
       finalOptions.signal,
       finalOptions.timeout
