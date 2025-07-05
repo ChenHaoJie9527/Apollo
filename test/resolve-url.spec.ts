@@ -52,4 +52,15 @@ describe("absolute URL handling", () => {
     expect(result).toBe("https://example.com");
     expect(mockSerializeParams).toHaveBeenCalledWith({});
   });
+  it("should handle https URLs", () => {
+    const result = resolveUrl(
+      "",
+      "https://example.com/users",
+      undefined,
+      undefined,
+      mockSerializeParams
+    );
+    expect(result).toBe("https://example.com/users");
+    expect(mockSerializeParams).toHaveBeenCalledWith({});
+  });
 });
