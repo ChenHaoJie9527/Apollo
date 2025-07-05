@@ -125,4 +125,9 @@ describe("relative URL handling", () => {
     const result = resolveUrl("", "/users", undefined, undefined, mockSerializeParams);
     expect(result).toBe("/users");
   })
+
+  it("should use input as-is when base is undefined", () => {
+    const result = resolveUrl(undefined, "/users", undefined, undefined, mockSerializeParams);
+    expect(result).toBe("/users");
+  })
 });
