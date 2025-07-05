@@ -21,7 +21,6 @@ export const resolveUrl = (
     // If failed, try using base as the base URL
     try {
       parsedUrl = new URL(inputStr, base || "http://localhost");
-      console.log("parsedUrl===", parsedUrl);
     } catch {
       // If both fail, create a virtual URL to parse parameters
       parsedUrl = new URL(
@@ -30,6 +29,7 @@ export const resolveUrl = (
       );
     }
   }
+
 
   // Extract existing query parameter keys from the URL
   const existingParamKeys = Array.from(parsedUrl.searchParams.keys());
@@ -45,7 +45,7 @@ export const resolveUrl = (
     ...fetcherOptsParams,
   });
 
-  // Fix: clearer URL construction logic
+  // clearer URL construction logic
   let finalUrl: string;
 
   if (/^https?:\/\//.test(inputStr)) {
@@ -54,6 +54,7 @@ export const resolveUrl = (
   } else if (!base) {
     // No base URL: use input directly
     finalUrl = inputStr;
+
   } else if (!inputStr) {
     // Empty input: use base URL
     finalUrl = base;

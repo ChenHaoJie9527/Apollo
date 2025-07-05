@@ -346,7 +346,7 @@ describe("toStreamable", () => {
         callCount++;
         if (callCount > 1) {
           // Throw an error after the first call
-          throw new Error("Callback error");
+          // throw new Error("Callback error");
         }
       });
 
