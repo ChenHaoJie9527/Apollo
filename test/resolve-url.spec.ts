@@ -87,4 +87,15 @@ describe("relative URL handling", () => {
     );
     expect(result).toBe("https://base.com/users");
   });
+
+  it("should handle base with trailing slash", () => {
+    const result = resolveUrl(
+      "https://base.com",
+      "users",
+      undefined,
+      undefined,
+      mockSerializeParams
+    );
+    expect(result).toBe("https://base.com/users");
+  });
 });
