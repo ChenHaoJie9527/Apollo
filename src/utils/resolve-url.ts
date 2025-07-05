@@ -21,6 +21,7 @@ export const resolveUrl = (
     // If failed, try using base as the base URL
     try {
       parsedUrl = new URL(inputStr, base || "http://localhost");
+      console.log("parsedUrl===", parsedUrl);
     } catch {
       // If both fail, create a virtual URL to parse parameters
       parsedUrl = new URL(

@@ -75,3 +75,16 @@ describe("absolute URL handling", () => {
     expect(mockSerializeParams).toHaveBeenCalledWith({});
   });
 });
+
+describe("relative URL handling", () => {
+  it("should combine base and relative path", () => {
+    const result = resolveUrl(
+      "https://base.com",
+      "/users",
+      undefined,
+      undefined,
+      mockSerializeParams
+    );
+    expect(result).toBe("https://base.com/users");
+  });
+});
