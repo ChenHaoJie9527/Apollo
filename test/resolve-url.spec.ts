@@ -172,4 +172,19 @@ describe("query parameters handling", () => {
     expect(result).toBe("https://example.com/users?userId=1&type=active");
     expect(mockSerializeParams).toHaveBeenCalledWith(fetchParams);
   });
+
+  it("should append parameters when URL already has query", () => {
+    const fetcherParams = {
+      type: "active",
+    }
+    const result = resolveUrl(
+      "",
+      "https://example.com/users?userId=1",
+      undefined,
+      fetcherParams,
+      mockSerializeParams
+    );
+    console.log("result===", result);
+    expect(result).toBe("https://example.com/users?userId=1&type=active");
+  })
 });

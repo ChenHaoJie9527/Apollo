@@ -30,7 +30,6 @@ export const resolveUrl = (
     }
   }
 
-
   // Extract existing query parameter keys from the URL
   const existingParamKeys = Array.from(parsedUrl.searchParams.keys());
 
@@ -54,7 +53,6 @@ export const resolveUrl = (
   } else if (!base) {
     // No base URL: use input directly
     finalUrl = inputStr;
-
   } else if (!inputStr) {
     // Empty input: use base URL
     finalUrl = base;
