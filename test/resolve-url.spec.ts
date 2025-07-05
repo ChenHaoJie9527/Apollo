@@ -63,4 +63,15 @@ describe("absolute URL handling", () => {
     expect(result).toBe("https://example.com/users");
     expect(mockSerializeParams).toHaveBeenCalledWith({});
   });
+  it("should handle http URLs", () => {
+    const result = resolveUrl(
+      "",
+      "http://example.com/users",
+      undefined,
+      undefined,
+      mockSerializeParams
+    );
+    expect(result).toBe("http://example.com/users");
+    expect(mockSerializeParams).toHaveBeenCalledWith({});
+  });
 });
