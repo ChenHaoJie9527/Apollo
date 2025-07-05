@@ -122,14 +122,26 @@ describe("relative URL handling", () => {
   });
 
   it("should use input as-is when no base provided", () => {
-    const result = resolveUrl("", "/users", undefined, undefined, mockSerializeParams);
+    const result = resolveUrl(
+      "",
+      "/users",
+      undefined,
+      undefined,
+      mockSerializeParams
+    );
     expect(result).toBe("/users");
-  })
+  });
 
   it("should use input as-is when base is undefined", () => {
-    const result = resolveUrl(undefined, "/users", undefined, undefined, mockSerializeParams);
+    const result = resolveUrl(
+      undefined,
+      "/users",
+      undefined,
+      undefined,
+      mockSerializeParams
+    );
     expect(result).toBe("/users");
-  })
+  });
 
   it("should use base when input is empty", () => {
     const result = resolveUrl(
@@ -140,5 +152,24 @@ describe("relative URL handling", () => {
       mockSerializeParams
     );
     expect(result).toBe("https://base.com");
-  })
+  });
+});
+
+describe("query parameters handling", () => {
+  it("should add parameters when URL has no existing query", () => {
+    const fetchParams = {
+      userId: 1,
+      type: "active",
+    };
+    const result = resolveUrl(
+      "",
+      "https://example.com/users",
+      undefined,
+      fetchParams,
+      mockSerializeParams
+    );
+
+    expect(result).toBe("https://example.com/users?userId=1&type=active");
+    expect(mockSerializeParams).toHaveBeenCalledWith(fetchParams);
+  });
 });
