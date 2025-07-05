@@ -90,6 +90,17 @@ describe("relative URL handling", () => {
 
   it("should handle base with trailing slash", () => {
     const result = resolveUrl(
+      "https://base.com/",
+      "users",
+      undefined,
+      undefined,
+      mockSerializeParams
+    );
+    expect(result).toBe("https://base.com/users");
+  });
+
+  it("should handle relative path without leading slash", () => {
+    const result = resolveUrl(
       "https://base.com",
       "users",
       undefined,
