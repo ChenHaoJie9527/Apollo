@@ -130,4 +130,15 @@ describe("relative URL handling", () => {
     const result = resolveUrl(undefined, "/users", undefined, undefined, mockSerializeParams);
     expect(result).toBe("/users");
   })
+
+  it("should use base when input is empty", () => {
+    const result = resolveUrl(
+      "https://base.com",
+      "",
+      undefined,
+      undefined,
+      mockSerializeParams
+    );
+    expect(result).toBe("https://base.com");
+  })
 });
