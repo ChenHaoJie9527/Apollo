@@ -120,4 +120,9 @@ describe("relative URL handling", () => {
     );
     expect(result).toBe("https://base.com/users");
   });
+
+  it("should use input as-is when no base provided", () => {
+    const result = resolveUrl("", "/users", undefined, undefined, mockSerializeParams);
+    expect(result).toBe("/users");
+  })
 });
