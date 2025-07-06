@@ -355,7 +355,7 @@ describe("URL parsing edge cases", () => {
   it("should handle relative paths with query parameters", () => {
     const defaultParams = {
       from: "default",
-      to: "test1" // to will be filtered out because it already exists in the URL.
+      to: "test1", // to will be filtered out because it already exists in the URL.
     };
     const result = resolveUrl(
       "https://example.com",
@@ -367,6 +367,20 @@ describe("URL parsing edge cases", () => {
     expect(result).toBe("https://example.com/users?to=test2&from=default");
     expect(mockSerializeParams).toHaveBeenCalledWith({
       from: "default",
+    });
+  });
+
+  it("should handle URL with fragment", () => {
+    const result = resolveUrl(
+      "",
+      "https://example.com/users#fragment",
+      undefined,
+      {test: "value"},
+      mockSerializeParams
+    );
+    expect(result).toBe("https://example.com/users#fragment?test=value");
+    expect(mockSerializeParams).toHaveBeenCalledWith({
+      test: "value",
     });
   });
 });
