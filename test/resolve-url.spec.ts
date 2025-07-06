@@ -337,3 +337,18 @@ describe("query parameters handling", () => {
     expect(result).toBe("https://example.com/users?userId=123&type=1");
   });
 });
+
+describe("URL parsing edge cases", () => {
+  it("should handle malformed URLs gracefully", () => {
+    const result = resolveUrl(
+      "",
+      "not-a-valid-url",
+      undefined,
+      {
+        test: "value",
+      },
+      mockSerializeParams
+    );
+    expect(result).toBe("not-a-valid-url?test=value");
+  });
+});
