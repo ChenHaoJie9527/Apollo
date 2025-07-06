@@ -311,4 +311,16 @@ describe("query parameters handling", () => {
     expect(result).toBe("https://example.com/users");
     expect(mockSerializeParams).toHaveBeenCalledWith({});
   });
+
+  it("should handle undefined parameters", () => {
+    const result = resolveUrl(
+      "",
+      "https://example.com/users",
+      undefined,
+      undefined,
+      mockSerializeParams
+    );
+    expect(result).toBe("https://example.com/users");
+    expect(mockSerializeParams).toHaveBeenCalledWith({});
+  });
 });
