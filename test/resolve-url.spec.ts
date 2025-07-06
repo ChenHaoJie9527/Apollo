@@ -184,7 +184,30 @@ describe("query parameters handling", () => {
       fetcherParams,
       mockSerializeParams
     );
-    console.log("result===", result);
     expect(result).toBe("https://example.com/users?userId=1&type=active");
+  })
+
+  it("should merge defaultOptsParams and fetcherOptsParams", () => {
+    const defaultParams = {
+      limit: 10,
+      sort: "name"
+    }
+    const fetcherParams = {
+      userId: 1
+    }
+    const result = resolveUrl(
+      "",
+      "https://example.com/users",
+      defaultParams,
+      fetcherParams,
+      mockSerializeParams
+    );
+
+    expect(result).toBe("https://example.com/users?limit=10&sort=name&userId=1");
+    expect(mockSerializeParams).toHaveBeenCalledWith({
+      limit: 10,
+      sort: "name",
+      userId: 1
+    });
   })
 });
