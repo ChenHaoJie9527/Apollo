@@ -176,7 +176,7 @@ describe("query parameters handling", () => {
   it("should append parameters when URL already has query", () => {
     const fetcherParams = {
       type: "active",
-    }
+    };
     const result = resolveUrl(
       "",
       "https://example.com/users?userId=1",
@@ -185,16 +185,16 @@ describe("query parameters handling", () => {
       mockSerializeParams
     );
     expect(result).toBe("https://example.com/users?userId=1&type=active");
-  })
+  });
 
   it("should merge defaultOptsParams and fetcherOptsParams", () => {
     const defaultParams = {
       limit: 10,
-      sort: "name"
-    }
+      sort: "name",
+    };
     const fetcherParams = {
-      userId: 1
-    }
+      userId: 1,
+    };
     const result = resolveUrl(
       "",
       "https://example.com/users",
@@ -203,23 +203,25 @@ describe("query parameters handling", () => {
       mockSerializeParams
     );
 
-    expect(result).toBe("https://example.com/users?limit=10&sort=name&userId=1");
+    expect(result).toBe(
+      "https://example.com/users?limit=10&sort=name&userId=1"
+    );
     expect(mockSerializeParams).toHaveBeenCalledWith({
       limit: 10,
       sort: "name",
-      userId: 1
+      userId: 1,
     });
-  })
+  });
 
   it("should prioritize fetcherOptsParams over defaultOptsParams", () => {
     const defaultParams = {
       limit: 10,
-      userId: 999
-    }
+      userId: 999,
+    };
 
     const fetcherParams = {
-      userId: 1
-    }
+      userId: 1,
+    };
 
     const result = resolveUrl(
       "",
@@ -232,19 +234,19 @@ describe("query parameters handling", () => {
     expect(result).toBe("https://example.com/users?limit=10&userId=1");
     expect(mockSerializeParams).toHaveBeenCalledWith({
       limit: 10,
-      userId: 1
+      userId: 1,
     });
-  })
+  });
 
   it("should exclude defaultOptsParams keys that exist in URL", () => {
     const defaultParams = {
       page: 2,
       limit: 100,
-      sort: "name"
-    }
+      sort: "name",
+    };
     const fetcherParams = {
-      userId: 1
-    }
+      userId: 1,
+    };
 
     const result = resolveUrl(
       "",
@@ -252,13 +254,49 @@ describe("query parameters handling", () => {
       defaultParams,
       fetcherParams,
       mockSerializeParams
-    )
+    );
 
-    expect(result).toBe("https://example.com/users?page=1&limit=100&sort=name&userId=1");
+    expect(result).toBe(
+      "https://example.com/users?page=1&limit=100&sort=name&userId=1"
+    );
     expect(mockSerializeParams).toHaveBeenCalledWith({
       limit: 100,
       sort: "name",
-      userId: 1
+      userId: 1,
     });
-  })
+  });
+
+  it("should handle complex query parameter scenarios", () => {
+    const defaultParams = {
+      page: 1,
+      limit: 20,
+      sort: "create_id",
+      filter: "active",
+    };
+
+    const fetcherParams = {
+      userId: 123,
+      limit: 50,
+      search: "john",
+    };
+
+    const result = resolveUrl(
+      "",
+      "https://example.com/users?page=2&extra=value",
+      defaultParams,
+      fetcherParams,
+      mockSerializeParams
+    );
+
+    expect(result).toBe(
+      "https://example.com/users?page=2&extra=value&limit=50&sort=create_id&filter=active&userId=123&search=john"
+    );
+    expect(mockSerializeParams).toHaveBeenCalledWith({
+      limit: 50,
+      sort: "create_id",
+      filter: "active",
+      userId: 123,
+      search: "john",
+    });
+  });
 });
