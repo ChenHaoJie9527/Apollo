@@ -235,4 +235,30 @@ describe("query parameters handling", () => {
       userId: 1
     });
   })
+
+  it("should exclude defaultOptsParams keys that exist in URL", () => {
+    const defaultParams = {
+      page: 2,
+      limit: 100,
+      sort: "name"
+    }
+    const fetcherParams = {
+      userId: 1
+    }
+
+    const result = resolveUrl(
+      "",
+      "https://example.com/users?page=1",
+      defaultParams,
+      fetcherParams,
+      mockSerializeParams
+    )
+
+    expect(result).toBe("https://example.com/users?page=1&limit=100&sort=name&userId=1");
+    expect(mockSerializeParams).toHaveBeenCalledWith({
+      limit: 100,
+      sort: "name",
+      userId: 1
+    });
+  })
 });
