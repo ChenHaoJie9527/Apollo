@@ -32,7 +32,6 @@ export const resolveUrl = (
 
   // Extract existing query parameter keys from the URL
   const existingParamKeys = Array.from(parsedUrl.searchParams.keys());
-
   // Safely exclude existing keys from defaultOptsParams
   const filteredDefaultParams = defaultOptsParams
     ? omit(defaultOptsParams, existingParamKeys)

@@ -351,4 +351,22 @@ describe("URL parsing edge cases", () => {
     );
     expect(result).toBe("not-a-valid-url?test=value");
   });
+
+  it("should handle relative paths with query parameters", () => {
+    const defaultParams = {
+      from: "default",
+      to: "test1" // to will be filtered out because it already exists in the URL.
+    };
+    const result = resolveUrl(
+      "https://example.com",
+      "/users?to=test2",
+      defaultParams,
+      undefined,
+      mockSerializeParams
+    );
+    expect(result).toBe("https://example.com/users?to=test2&from=default");
+    expect(mockSerializeParams).toHaveBeenCalledWith({
+      from: "default",
+    });
+  });
 });
