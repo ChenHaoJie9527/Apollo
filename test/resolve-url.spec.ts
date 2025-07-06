@@ -292,11 +292,23 @@ describe("query parameters handling", () => {
       "https://example.com/users?page=2&extra=value&limit=50&sort=create_id&filter=active&userId=123&search=john"
     );
     expect(mockSerializeParams).toHaveBeenCalledWith({
-      limit: 50,
-      sort: "create_id",
-      filter: "active",
-      userId: 123,
-      search: "john",
+      limit: 50, // fetcherParams override
+      sort: "create_id", // from defaultParams
+      filter: "active", // from defaultParams
+      userId: 123, // from fetcherParams
+      search: "john", // from fetcherParams
     });
+  });
+
+  it("should handle empty parameters gracefully", () => {
+    const result = resolveUrl(
+      "",
+      "https://example.com/users",
+      {},
+      {},
+      mockSerializeParams
+    );
+    expect(result).toBe("https://example.com/users");
+    expect(mockSerializeParams).toHaveBeenCalledWith({});
   });
 });
