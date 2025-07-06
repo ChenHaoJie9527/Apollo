@@ -210,4 +210,29 @@ describe("query parameters handling", () => {
       userId: 1
     });
   })
+
+  it("should prioritize fetcherOptsParams over defaultOptsParams", () => {
+    const defaultParams = {
+      limit: 10,
+      userId: 999
+    }
+
+    const fetcherParams = {
+      userId: 1
+    }
+
+    const result = resolveUrl(
+      "",
+      "https://example.com/users",
+      defaultParams,
+      fetcherParams,
+      mockSerializeParams
+    );
+
+    expect(result).toBe("https://example.com/users?limit=10&userId=1");
+    expect(mockSerializeParams).toHaveBeenCalledWith({
+      limit: 10,
+      userId: 1
+    });
+  })
 });
