@@ -323,4 +323,17 @@ describe("query parameters handling", () => {
     expect(result).toBe("https://example.com/users");
     expect(mockSerializeParams).toHaveBeenCalledWith({});
   });
+
+  it("should remove leading ? from serialized params", () => {
+    const mockSerializeWithQuestionMark = vi.fn(() => "?userId=123&type=1");
+    const result = resolveUrl(
+      "",
+      "https://example.com/users",
+      undefined,
+      undefined,
+      mockSerializeWithQuestionMark
+    );
+
+    expect(result).toBe("https://example.com/users?userId=123&type=1");
+  });
 });
