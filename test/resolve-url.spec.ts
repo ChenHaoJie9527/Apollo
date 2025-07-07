@@ -375,12 +375,25 @@ describe("URL parsing edge cases", () => {
       "",
       "https://example.com/users#fragment",
       undefined,
-      {test: "value"},
+      { test: "value" },
       mockSerializeParams
     );
     expect(result).toBe("https://example.com/users#fragment?test=value");
     expect(mockSerializeParams).toHaveBeenCalledWith({
       test: "value",
     });
+  });
+
+  it("should handle URL with port", () => {
+    const result = resolveUrl(
+      "",
+      "https://example.com:8080/users",
+      undefined,
+      {
+        test: "value",
+      },
+      mockSerializeParams
+    );
+    expect(result).toBe("https://example.com:8080/users?test=value");
   });
 });
