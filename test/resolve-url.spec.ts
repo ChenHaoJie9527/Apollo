@@ -432,4 +432,33 @@ describe("integration scenarios", () => {
       includeDelete: false,
     });
   });
+
+  it("should work with omit function for parameter exclusion", () => {
+    const input = new URL("https://api.example.com/search?q=test&format=json");
+    const defaultParams = {
+      q: "should-be-excluded", // should be excluded because exists in URL
+      format: "should-be-excluded", // should be excluded because exists in URL
+      limit: 10,
+      apiKey: "secret",
+    };
+    const fetcherParams = {
+      page: 1,
+    };
+
+    const result = resolveUrl(
+      "",
+      input,
+      defaultParams,
+      fetcherParams,
+      mockSerializeParams
+    );
+    expect(result).toBe(
+      "https://api.example.com/search?q=test&format=json&limit=10&apiKey=secret&page=1"
+    );
+    expect(mockSerializeParams).toHaveBeenCalledWith({
+      limit: 10,
+      apiKey: "secret",
+      page: 1,
+    });
+  });
 });
