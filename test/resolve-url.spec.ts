@@ -397,3 +397,39 @@ describe("URL parsing edge cases", () => {
     expect(result).toBe("https://example.com:8080/users?test=value");
   });
 });
+
+describe("integration scenarios", () => {
+  it("should handle complete real-world scenario", () => {
+    const base = "https://api.myapp.com/v1";
+    const input = "/users?page=1&sort=name";
+    const defaultParams = {
+      apiKey: "default-key",
+      page: 999, // should be excluded because exists in URL
+      limit: 20,
+      version: "v1",
+    };
+    const fetcherParams = {
+      userId: 123,
+      limit: 50, // should override default
+      includeDelete: false,
+    };
+
+    const result = resolveUrl(
+      base,
+      input,
+      defaultParams,
+      fetcherParams,
+      mockSerializeParams
+    );
+    expect(result).toBe(
+      "https://api.myapp.com/v1/users?page=1&sort=name&apiKey=default-key&limit=50&version=v1&userId=123&includeDelete=false"
+    );
+    expect(mockSerializeParams).toHaveBeenCalledWith({
+      apiKey: "default-key",
+      limit: 50,
+      version: "v1",
+      userId: 123,
+      includeDelete: false,
+    });
+  });
+});
