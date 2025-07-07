@@ -462,3 +462,30 @@ describe("integration scenarios", () => {
     });
   });
 });
+
+describe("return type and format", () => {
+  it("should always return a string", () => {
+    const result = resolveUrl(
+      "",
+      "https://example.com/users",
+      undefined,
+      undefined,
+      mockSerializeParams
+    );
+    expect(typeof result).toBe("string");
+  });
+
+  it("should handle when serializeParams returns empty string", () => {
+    const emptySerialize: SerializeParams = vi.fn(() => "");
+    const result = resolveUrl(
+      "",
+      "https://example.com/users",
+      undefined,
+      {
+        test: "value",
+      },
+      emptySerialize
+    );
+    expect(result).toBe("https://example.com/users");
+  });
+});
