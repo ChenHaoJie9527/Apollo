@@ -123,14 +123,14 @@ export const apollo = <
         outcome.error = e;
       }
 
-      // 获取重试配置，确保有默认值
+      // Get the retry configuration and make sure there are default values
       const retryConfig = finalOptions.retry || {
         attempts: 0,
         delay: 0,
         when: () => false,
       };
 
-      // 决定是否退出重试循环，有两个条件
+      // There are two conditions for deciding whether or not to exit the retry loop
       if (
         !(await retryConfig.when({ request, ...outcome })) ||
         ++attempt >
@@ -151,7 +151,7 @@ export const apollo = <
       // biome-ignore lint/correctness/noConstantCondition: <explanation>
     } while (true);
 
-    // 处理最终结果
+    // Handle the final result
     if (outcome.error) {
       finalOptions.onError?.(outcome.error, request);
       throw outcome.error;
@@ -159,9 +159,9 @@ export const apollo = <
 
     const response = outcome.response as Response;
 
-    // 判断响应是否被拒绝
+    // Check if the response is rejected
     if (!(await (finalOptions.reject || (() => false))(response))) {
-      // 成功路径：解析响应数据
+      // Success path: parse the response data
       let parsed: any;
       try {
         parsed = finalOptions.parseResponse
@@ -172,10 +172,10 @@ export const apollo = <
         throw error;
       }
 
-      // Schema 验证（如果提供了 schema）
+      // Schema validation (if a schema is provided)
       let data: any;
       try {
-        // 暂时跳过 schema 验证，将来可以添加
+        // Skip schema validation for now, it will be added in the future
         data = finalOptions.schema
           ? await validate(finalOptions.schema, parsed)
           : parsed;
@@ -188,7 +188,7 @@ export const apollo = <
       return data;
     }
 
-    // 失败路径：处理被拒绝的响应
+    // Failure path: handle the rejected response
     let respError: any;
     try {
       respError = finalOptions.parseRejected
