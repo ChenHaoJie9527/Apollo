@@ -1,5 +1,5 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec";
-import { ValidationError } from "../utils";
+import { ValidationError } from "./validation-error";
 
 export const validate = async <T extends StandardSchemaV1>(
   schema: T,

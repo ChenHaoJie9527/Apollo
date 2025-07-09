@@ -6,6 +6,8 @@ import type { MinFetchFn } from "./MinFetchFn";
 import type { ParseResponse } from "./ParseResponse";
 import type { SerializeBody } from "./SerializeBody";
 import type { OnRetry } from "./OnRetry";
+import type { ParseRejected } from "./ParseRejected";
+import type { StreamingEvent } from "./StreamingEvent";
 
 /**
  * FetcherOptions 是工具类型，用于从MinFetchFn的第二个参数options中，移除body、headers、method属性，并返回剩余的类型
@@ -27,6 +29,7 @@ export type FetcherOptions<
   method?: Method;
   params?: Record<string, any>;
   schema?: TSchema;
+  parseRejected?: ParseRejected
   parseResponse?: ParseResponse<TParsedData>;
   serializeBody?: SerializeBody<TRawBody>;
   signal?: AbortSignal;
@@ -35,4 +38,6 @@ export type FetcherOptions<
   onError?: (error: {}, request: Request) => void;
   onRetry?: OnRetry;
   onSuccess?: (data: any, request: Request) => void;
+  onRequestStreaming?: (event: StreamingEvent, request: Request) => void;
+  onResponseStreaming?: (event: StreamingEvent, response: Response) => void;
 } & {};

@@ -17,6 +17,7 @@ import {
   withTimeout,
   toStreamable,
   abortableDelay,
+  validate
 } from "./utils";
 import { resolveUrl } from "./utils/resolve-url";
 
@@ -176,7 +177,7 @@ export const apollo = <
       try {
         // 暂时跳过 schema 验证，将来可以添加
         data = finalOptions.schema
-          ? parsed // TODO: 添加实际的 schema 验证
+          ? await validate(finalOptions.schema, parsed)
           : parsed;
       } catch (error: any) {
         finalOptions.onError?.(error, request);
