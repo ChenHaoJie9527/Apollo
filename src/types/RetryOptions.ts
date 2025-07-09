@@ -1,18 +1,18 @@
 import type { MaybePromise } from "./MaybePromise";
 
 /**
- * 未知 “不能与类型保护一起使用，而”{}"可以
- * 在尝试访问属性时，“{}”的行为类似于 “未知”（ts 引发错误）
- * 在 ts 中， {}类型代表任何非 null 或 undefined 的值
- * {} 在 类型守卫中使用比 unknown 更安全方便，访问 {} 类型任意属性时，ts 仍然会报错
+ * Unknown “cannot be used with type guards, but “{}” can.
+ * When trying to access properties, “{}” behaves like “unknown” (ts raises an error)
+ * In ts, {} type represents any non-null or undefined value
+ * {} is safer and more convenient to use in type guards than unknown, ts still raises an error when accessing any property of {} type
  */
 type Unknown = {};
 
 /**
- * 重试上下文
- * 氛围2中场景
- * 1. 收到服务器响应，但响应时5xx错误，在这种情况下， response 字段会是一个Response对象，error字段可能是undefined
- * 2. 请求未发出或者请求未嫌贵那个，网络中断，DNS解析失败，等等，在这种情况下， response 字段是 undefined，error字段会是一个{}对象
+ * Retry context
+ * There are two scenarios:
+ * 1. Received a server response, but the response is a 5xx error, in this case, the response field will be a Response object, and the error field may be undefined
+ * 2. The request was not sent or the request was not sent, the network was interrupted, DNS resolution failed, etc., in this case, the response field is undefined, and the error field will be a {} object
  */
 export type RetryContext =
   | {
@@ -27,38 +27,38 @@ export type RetryContext =
     };
 
 /**
- * 定义重试次数
- * 1. 如果传递的是一个数字，则表示重试次数
- * 2. 如果传递的是一个函数，则表示重试次数的计算函数，函数接收请求对象作为参数，返回一个数字，表示重试次数
- * 3. 如果是重试函数，这就意味着可以根据不同请求，动态设置重试次数，甚至可以是一个异步函数
+ * Define retry attempts
+ * 1. If a number is passed, it represents the number of retries
+ * 2. If a function is passed, it represents the retry attempts calculation function, which receives the request object as a parameter and returns a number, representing the number of retries
+ * 3. If it is a retry function, this means that the number of retries can be dynamically set for different requests, even an asynchronous function
  */
 type RetryAttempts = number | ((request: Request) => MaybePromise<number>);
 
 /**
- * 定义重试前延迟时间
- * 1. 如果传递的是一个数字，则表示重试前延迟时间
- * 2. 如果传递的是一个函数，接受RetryContext和当前尝试次数 attempt 作为参数，返回一个数字，表示重试前延迟时间
- * 3. 示例：
- * 4.   1.指数退避：每次重试后，延迟时间加倍 (delay: ({attempt}) => 1000 * 2 ** attempt)
- * 5.   2.根据错误类型决定延迟：如果是服务器错误 context.response 则延迟5秒;
- * 6.   3.如果是网络错误 context.error 则立即重试
+ * Define retry delay
+ * 1. If a number is passed, it represents the retry delay
+ * 2. If a function is passed, it represents the retry delay calculation function, which receives the RetryContext and the current attempt number attempt as parameters and returns a number, representing the retry delay
+ * 3. Examples: 
+ * 4.   1.Exponential backoff: The delay time is doubled after each retry (delay: ({attempt}) => 1000 * 2 ** attempt)
+ * 5.   2.Determine the delay based on the error type: if the server error context.response, then delay 5 seconds;
+ * 6.   3.If the network error context.error, then retry immediately
  */
 type RetryDelay =
   | number
   | ((context: RetryContext & { attempt: number }) => MaybePromise<number>);
 
 /**
- * 定义是否可以重试函数
- * 1. 通过检查context 来编写逻辑，在特定条件下进行重试
- * 2. 示例：
- * 3.   1.服务器错误(5xx)时重试，而在客户端错误(4xx)时放弃
- * 4.   2.在发生特定类型的网络错误时才重试
- * 5.   3.如果response.body中包含特定错误码，则不重试
+ * Define whether the retry function can be called
+ * 1. Write logic by checking context, and retry under specific conditions
+ * 2. Examples:
+ * 3.   1.Retry when the server error (5xx), and give up when the client error (4xx)
+ * 4.   2.Retry when a specific type of network error occurs
+ * 5.   3.If the specific error code is included in response.body, do not retry
  */
 type RetryWhen = (context: RetryContext) => boolean;
 
 export type RetryOptions = {
-  attempts: RetryAttempts; // 重试次数
-  delay: RetryDelay; // 重试前延迟时间
-  when: RetryWhen; // 是否可以重试函数: 如果返回 true，则重试，否则不重试
+  attempts: RetryAttempts; // Retry attempts
+  delay: RetryDelay; // Retry delay
+  when: RetryWhen; // Retry when function: if true, retry, otherwise not retry
 };

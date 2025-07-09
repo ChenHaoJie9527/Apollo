@@ -5,15 +5,16 @@ import type { MinFetchFn } from "./MinFetchFn";
 import type { ParseResponse } from "./ParseResponse";
 import type { SerializeBody } from "./SerializeBody";
 import type { RetryOptions } from "./RetryOptions";
+import type { OnRetry } from "./OnRetry";
 
 /**
- * 客户端的默认配置选项
- * @baseUrl: 基础URL 通常是后端接口的公共前缀
- * @headers: 请求头 通常是请求头的一些默认配置
- * @method: 请求方法 通常是请求方法的一些默认配置
- * @params: 请求参数 通常是请求参数的一些默认配置
- * @parseResponse: 响应解析函数 通常是响应解析函数的一些默认配置
- * @serializeBody: 请求体序列化函数 通常是请求体序列化函数的一些默认配置
+ * Default configuration options for the client
+ * @baseUrl: The base URL, usually the public prefix of the backend interface
+ * @headers: Request headers, usually some default configurations of request headers
+ * @method: Request method, usually some default configurations of request methods
+ * @params: Request parameters, usually some default configurations of request parameters
+ * @parseResponse: Response parsing function, usually some default configurations of response parsing functions
+ * @serializeBody: Request body serialization function, usually some default configurations of request body serialization functions
  */
 export type DefaultOptions<
   T extends MinFetchFn,
@@ -21,7 +22,7 @@ export type DefaultOptions<
   TDefaultRawBody
 > = BaseOptions<T> & {
   baseUrl?: string;
-  headers?: HeadersInit | HeadersObject; //headerInit: TS内置类型，表示fetch的headers参数类型
+  headers?: HeadersInit | HeadersObject; //headerInit: TS built-in type, represents the type of fetch's headers parameter
   method?: Method;
   params?: Record<string, any>;
   parseResponse?: ParseResponse<TDefaultParseData>;
@@ -29,4 +30,8 @@ export type DefaultOptions<
   retry?: RetryOptions;
   signal?: AbortSignal;
   timeout?: number;
+  onRequest?: (request: Request) => void;
+  onError?: (error: {}, request: Request) => void;
+  onRetry?: OnRetry;
+  onSuccess?: (data: any, request: Request) => void;
 };
