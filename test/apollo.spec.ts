@@ -44,8 +44,9 @@ describe("apollo http request with msw", () => {
   });
 
   it.each`
-    scenario            | method   | url                             | responseStatus | responseData                   | expectedResult
-    ${"GET successful"} | ${"GET"} | ${"https://api.test.com/users"} | ${200}         | ${{ users: ["Alice", "Bob"] }} | ${{ users: ["Alice", "Bob"] }}
+    scenario             | method    | url                             | responseStatus | responseData                   | expectedResult
+    ${"GET successful"}  | ${"GET"}  | ${"https://api.test.com/users"} | ${200}         | ${{ users: ["Alice", "Bob"] }} | ${{ users: ["Alice", "Bob"] }}
+    ${"POST successful"} | ${"POST"} | ${"https://api.test.com/users"} | ${201}         | ${{ id: 1, name: "Alice" }}    | ${{ id: 1, name: "Alice" }}
   `(
     "should $scenario",
     async ({ method, url, responseStatus, responseData, expectedResult }) => {
@@ -56,10 +57,9 @@ describe("apollo http request with msw", () => {
       );
       const api = apollo(fetch);
       const result = await api(url, {
-        method
-      })
-      expect(result).toEqual(expectedResult)
-
+        method,
+      });
+      expect(result).toEqual(expectedResult);
     }
   );
 });
