@@ -128,4 +128,14 @@ describe("boundary condition", () => {
     expect(endTime - statTime).toBeLessThan(10);
   });
 
+  it("should handle very large delays", async () => {
+    const controller = new AbortController();
+    const promise = abortableDelay(Number.MAX_SAFE_INTEGER, controller.signal);
+
+    // 立即中断
+    controller.abort("Test large delay");
+
+    await expect(promise).rejects.toBe("Test large delay");
+  })
+
 });
