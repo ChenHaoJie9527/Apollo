@@ -266,4 +266,16 @@ describe("Practical application scenarios", () => {
     await expect(simulateRetryLogic()).rejects.toThrow("Operation failed");
     expect(attemptCount).toBe(maxAttempts);
   });
+
+  it("should handle timeout scenarios", async () => {
+    const controller = new AbortController();
+    const timeOutMs = 200;
+
+    // simulate timeout
+    setTimeout(() => controller.abort(new Error("Timeout")), timeOutMs);
+
+    const promise = abortableDelay(1000, controller.signal);
+
+    await expect(promise).rejects.toThrow("Timeout");
+  });
 });
