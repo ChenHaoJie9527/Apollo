@@ -67,4 +67,17 @@ describe("interrupt function", () => {
 
         await expect(promise).rejects.toThrow(customError)
     })
+
+    it("should reject immediately if signal is already aborted", async () => {
+        const controller = new AbortController();
+        controller.abort("Already aborted");
+
+        const startTime = Date.now();
+        const promise = abortableDelay(1000, controller.signal);
+
+        await expect(promise).rejects.toBe("Already aborted")
+
+        const endTime = Date.now();
+        expect(endTime - startTime).toBeLessThan(10);
+    })
 })
