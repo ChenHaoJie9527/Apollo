@@ -132,10 +132,29 @@ describe("boundary condition", () => {
     const controller = new AbortController();
     const promise = abortableDelay(Number.MAX_SAFE_INTEGER, controller.signal);
 
-    // 立即中断
+    // Immediate interruptions
     controller.abort("Test large delay");
 
     await expect(promise).rejects.toBe("Test large delay");
   })
 
+});
+
+
+describe("Concurrency and multiple calls", () => {
+  it("should handle multiple concurrent delays", async () => {
+    const promise = [
+        abortableDelay(100),
+        abortableDelay(150),
+        abortableDelay(200),
+    ]
+
+    const startTime = Date.now();
+    await Promise.all(promise);
+    const endTime = Date.now();
+
+    // All latency should be 200ms+ but no more than 250ms
+    expect(endTime - startTime).toBeGreaterThanOrEqual(190);
+    expect(endTime - startTime).toBeLessThan(250);
+  });
 });
