@@ -202,4 +202,14 @@ describe("performance testing", () => {
     // memory growth should be within a reasonable range (e.g., less than 1MB)
     expect(memoryGrowth).toBeLessThan(1024 * 1024);
   });
+  it("should handle rapid abort and delay cycles", async () => {
+    for (let i = 0; i < 100; i++) {
+      const controller = new AbortController();
+      const promises = abortableDelay(100, controller.signal);
+
+      controller.abort(`Cycle ${i}`);
+
+      await expect(promises).rejects.toBe(`Cycle ${i}`);
+    }
+  });
 });
