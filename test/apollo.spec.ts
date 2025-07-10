@@ -155,12 +155,42 @@ describe("Testing with custom default options", () => {
       })
     );
 
-    const api = apollo(fetch)
+    const api = apollo(fetch);
     await api(testURL, {
       method: "POST",
-      body: requestBody
-    })
+      body: requestBody,
+    });
 
     expect(receiveBody).toEqual(requestBody);
   });
+
+  // Testing URL Parameter Handling
+  it.each`
+    baseUrl                   | input                            | params                    | expectedUrl
+    ${"https://api.test.com"} | ${"/users"}                      | ${{ limit: 10, page: 1 }} | ${"https://api.test.com/users?limit=10&page=1"}
+    ${"https://api.test.com"} | ${"/search"}                     | ${{ q: "test" }}          | ${"https://api.test.com/search?q=test"}
+    ${undefined}              | ${"https://api.test.com/direct"} | ${{}}                     | ${"https://api.test.com/direct"}
+  `(
+    "should handle URL parameters: $expectedUrl",
+    async ({ baseUrl, input, params, expectedUrl }) => {
+      let requestedUrl: string | undefined;
+
+      server.use(
+        http.get("*", ({ request }) => {
+          requestedUrl = request.url;
+          return HttpResponse.json({ success: true });
+        })
+      );
+
+      const getDefaultOptions = () => ({
+        baseUrl,
+        params,
+      });
+
+      const api = apollo(fetch, getDefaultOptions);
+      await api(input, { method: "GET" });
+
+      expect(requestedUrl).toBe(expectedUrl);
+    }
+  );
 });
