@@ -66,3 +66,52 @@ describe("apollo http request with msw", () => {
     }
   );
 });
+
+describe("Testing Error Scenarios", () => {
+  beforeAll(() => {
+    server.listen({
+      onUnhandledRequest: "error",
+    });
+  });
+  afterEach(() => {
+    server.resetHandlers();
+  });
+
+  afterAll(() => {
+    server.close();
+  });
+
+  it.each`
+    scenario              | method    | url                             | responseData | shouldThrow
+    ${"404 Not Found"}    | ${"GET"}  | ${"https://api.test.com/404"}   | ${404}       | ${true}
+    ${"500 Server Error"} | ${"GET"}  | ${"https://api.test.com/500"}   | ${500}       | ${true}
+    ${"400 Bad Request"}  | ${"POST"} | ${"https://api.test.com/bad"}   | ${400}       | ${true}
+    ${"Network Error"}    | ${"GET"}  | ${"https://api.test.com/error"} | ${null}      | ${true}
+    ${"401 Unauthorized"} | ${"GET"}  | ${"https://api.test.com/auth"}  | ${401}       | ${true}
+  `(
+    "should handle $scenario",
+    async ({ method, url, responseData, shouldThrow }) => {
+      server.use(
+        http[method.toLowerCase()](url, () => {
+          if (responseData === null) {
+            return HttpResponse.error();
+          }
+          return HttpResponse.json(
+            {
+              error: "Something went wrong",
+            },
+            {
+              status: responseData,
+            }
+          );
+        })
+      );
+
+      const api = apollo(fetch);
+
+      if (shouldThrow) {
+        await expect(api(url, { method })).rejects.toThrow();
+      }
+    }
+  );
+});
