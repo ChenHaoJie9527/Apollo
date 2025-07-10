@@ -119,3 +119,13 @@ describe("Resource cleanup", () => {
     expect(clearTimeoutSpy).toHaveBeenCalled();
   });
 });
+
+describe("boundary condition", () => {
+  it("should handle negative delay by treating it as zero",  async() => {
+    const statTime = Date.now();
+    await abortableDelay(-10);
+    const endTime = Date.now();
+    expect(endTime - statTime).toBeLessThan(10);
+  });
+
+});
