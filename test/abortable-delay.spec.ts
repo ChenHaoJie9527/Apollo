@@ -30,5 +30,10 @@ describe("abortableDelay", () => {
 
         expect(endTime - startTime).toBeLessThan(10);
     })
+
+    it("should work without signal parameter", async () => {
+        const promise = abortableDelay(50);
+        await expect(promise).resolves.toBeUndefined()
+    })
   });
 });
