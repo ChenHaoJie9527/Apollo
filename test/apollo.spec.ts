@@ -9,11 +9,26 @@ import {
   beforeAll,
 } from "vitest";
 import { apollo } from "../src/apollo";
-import type { MinFetchFn } from "../src/types";
+import type { DefaultOptions, MinFetchFn } from "../src/types";
 import { setupServer } from "msw/node";
 import { http, HttpResponse } from "msw";
 
 const server = setupServer();
+
+// Global MSW server setup for all tests
+beforeAll(() => {
+  server.listen({
+    onUnhandledRequest: "error",
+  });
+});
+
+afterEach(() => {
+  server.resetHandlers();
+});
+
+afterAll(() => {
+  server.close();
+});
 
 describe("apollo", () => {
   // 基础函数定义测试
@@ -30,18 +45,6 @@ describe("apollo", () => {
 });
 
 describe("apollo http request with msw", () => {
-  beforeAll(() => {
-    server.listen({
-      onUnhandledRequest: "error",
-    });
-  });
-  afterEach(() => {
-    server.resetHandlers();
-  });
-
-  afterAll(() => {
-    server.close();
-  });
 
   it.each`
     scenario               | method      | url                               | responseStatus | responseData                   | expectedResult
@@ -68,18 +71,6 @@ describe("apollo http request with msw", () => {
 });
 
 describe("Testing Error Scenarios", () => {
-  beforeAll(() => {
-    server.listen({
-      onUnhandledRequest: "error",
-    });
-  });
-  afterEach(() => {
-    server.resetHandlers();
-  });
-
-  afterAll(() => {
-    server.close();
-  });
 
   it.each`
     scenario              | method    | url                             | responseData | shouldThrow
@@ -114,4 +105,37 @@ describe("Testing Error Scenarios", () => {
       }
     }
   );
+});
+
+describe("Testing with custom default options", () => {
+  it("should work with custom default options", async () => {
+    const testURL = "https://api.test.com/configured";
+
+    server.use(
+      http.get(testURL, () => {
+        return HttpResponse.json({
+          configured: true,
+        });
+      })
+    );
+
+    const getDefaultOptions = (): DefaultOptions<typeof fetch, any, any> => {
+      return {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer token",
+          "Content-Type": "application/json",
+        },
+        parseResponse: async (response) => {
+          return await response.json();
+        },
+      };
+    };
+
+    const api = apollo(fetch, getDefaultOptions);
+    const result = await api(testURL, {});
+    expect(result).toEqual({
+      configured: true,
+    });
+  });
 });
