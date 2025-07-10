@@ -45,7 +45,6 @@ describe("apollo", () => {
 });
 
 describe("apollo http request with msw", () => {
-
   it.each`
     scenario               | method      | url                               | responseStatus | responseData                   | expectedResult
     ${"GET successful"}    | ${"GET"}    | ${"https://api.test.com/users"}   | ${200}         | ${{ users: ["Alice", "Bob"] }} | ${{ users: ["Alice", "Bob"] }}
@@ -71,7 +70,6 @@ describe("apollo http request with msw", () => {
 });
 
 describe("Testing Error Scenarios", () => {
-
   it.each`
     scenario              | method    | url                             | responseData | shouldThrow
     ${"404 Not Found"}    | ${"GET"}  | ${"https://api.test.com/404"}   | ${404}       | ${true}
@@ -137,5 +135,32 @@ describe("Testing with custom default options", () => {
     expect(result).toEqual({
       configured: true,
     });
+  });
+
+  it("should serialize request body correctly", async () => {
+    const testURL = "https://api.test.com/serialize";
+    const requestBody = {
+      name: "Test User",
+      age: 25,
+    };
+
+    let receiveBody: any;
+
+    server.use(
+      http.post(testURL, async ({ request }) => {
+        receiveBody = await request.json();
+        return HttpResponse.json({
+          receive: true,
+        });
+      })
+    );
+
+    const api = apollo(fetch)
+    await api(testURL, {
+      method: "POST",
+      body: requestBody
+    })
+
+    expect(receiveBody).toEqual(requestBody);
   });
 });
