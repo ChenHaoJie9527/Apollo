@@ -213,3 +213,25 @@ describe("performance testing", () => {
     }
   });
 });
+
+describe("type safety", () => {
+  it("should resolve with void type", async () => {
+    const result = await abortableDelay(1);
+    expect(result).toBeUndefined();
+  });
+
+  it("should reject with the correct reason type", async () => {
+    const controller = new AbortController();
+    const stringReason = "string reason";
+    const errorReason = new Error("error reason");
+
+    const promise1 = abortableDelay(100, controller.signal);
+    controller.abort(stringReason);
+    await expect(promise1).rejects.toBe(stringReason);
+
+    const controller2 = new AbortController();
+    const promise2 = abortableDelay(100, controller2.signal);
+    controller2.abort(errorReason);
+    await expect(promise2).rejects.toBe(errorReason);
+  });
+});
