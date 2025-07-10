@@ -157,4 +157,21 @@ describe("Concurrency and multiple calls", () => {
     expect(endTime - startTime).toBeGreaterThanOrEqual(190);
     expect(endTime - startTime).toBeLessThan(250);
   });
+
+  it("should handle multiple delays with same abort signal", async () => {
+    const controller = new AbortController();
+    const promises = [
+        abortableDelay(1000, controller.signal),
+        abortableDelay(1500, controller.signal),
+        abortableDelay(2000, controller.signal),
+    ]
+
+    setTimeout(() => controller.abort("Abort all"), 100);
+
+    const result = await Promise.allSettled(promises);
+    result.forEach(res => {
+        expect(res.status).toBe("rejected");
+        expect((res as PromiseRejectedResult).reason).toBe("Abort all");
+    })
+  })
 });
