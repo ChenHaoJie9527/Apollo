@@ -37,3 +37,24 @@ describe("abortableDelay", () => {
     })
   });
 });
+
+describe("interrupt function", () => {
+    it("should reject if interrupted before delay completes", async () => {
+        const controller = new AbortController();
+        const promise = abortableDelay(1000, controller.signal);
+
+        // Interrupt before delay completes
+        setTimeout(() => controller.abort("Test aborted"), 500);
+
+        await expect(promise).rejects.toBe("Test aborted");
+    })
+
+    it("should reject with default reason if no reason provided", async() => {
+        const controller = new AbortController();
+        const promise = abortableDelay(1000, controller.signal);
+
+        setTimeout(() => controller.abort(), 500)
+
+        await expect(promise).rejects.toBeInstanceOf(DOMException)
+    })
+})
