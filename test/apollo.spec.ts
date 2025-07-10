@@ -44,9 +44,12 @@ describe("apollo http request with msw", () => {
   });
 
   it.each`
-    scenario             | method    | url                             | responseStatus | responseData                   | expectedResult
-    ${"GET successful"}  | ${"GET"}  | ${"https://api.test.com/users"} | ${200}         | ${{ users: ["Alice", "Bob"] }} | ${{ users: ["Alice", "Bob"] }}
-    ${"POST successful"} | ${"POST"} | ${"https://api.test.com/users"} | ${201}         | ${{ id: 1, name: "Alice" }}    | ${{ id: 1, name: "Alice" }}
+    scenario               | method      | url                               | responseStatus | responseData                   | expectedResult
+    ${"GET successful"}    | ${"GET"}    | ${"https://api.test.com/users"}   | ${200}         | ${{ users: ["Alice", "Bob"] }} | ${{ users: ["Alice", "Bob"] }}
+    ${"POST successful"}   | ${"POST"}   | ${"https://api.test.com/users"}   | ${201}         | ${{ id: 1, name: "Alice" }}    | ${{ id: 1, name: "Alice" }}
+    ${"PUT successful"}    | ${"PUT"}    | ${"https://api.test.com/users/1"} | ${200}         | ${{ id: 1, name: "Updated" }}  | ${{ id: 1, name: "Updated" }}
+    ${"DELETE successful"} | ${"DELETE"} | ${"https://api.test.com/users/1"} | ${204}         | ${null}                        | ${null}
+    ${"JSON response"}     | ${"GET"}    | ${"https://api.test.com/data"}    | ${200}         | ${{ message: "success" }}      | ${{ message: "success" }}
   `(
     "should $scenario",
     async ({ method, url, responseStatus, responseData, expectedResult }) => {
