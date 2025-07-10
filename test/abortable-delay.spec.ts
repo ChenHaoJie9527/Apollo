@@ -22,5 +22,13 @@ describe("abortableDelay", () => {
         expect(endTime - startTime).toBeGreaterThanOrEqual(90); // Allowable -10ms error
         expect(endTime - startTime).toBeLessThan(150); // Allowable +50ms error
     });
+
+    it("should resolve immediately with zero delay", async () => {
+        const startTime = performance.now();
+        await abortableDelay(0);
+        const endTime = performance.now();
+
+        expect(endTime - startTime).toBeLessThan(10);
+    })
   });
 });
