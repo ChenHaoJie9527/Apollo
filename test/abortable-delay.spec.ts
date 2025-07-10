@@ -121,7 +121,7 @@ describe("Resource cleanup", () => {
 });
 
 describe("boundary condition", () => {
-  it("should handle negative delay by treating it as zero",  async() => {
+  it("should handle negative delay by treating it as zero", async () => {
     const statTime = Date.now();
     await abortableDelay(-10);
     const endTime = Date.now();
@@ -136,18 +136,16 @@ describe("boundary condition", () => {
     controller.abort("Test large delay");
 
     await expect(promise).rejects.toBe("Test large delay");
-  })
-
+  });
 });
-
 
 describe("Concurrency and multiple calls", () => {
   it("should handle multiple concurrent delays", async () => {
     const promise = [
-        abortableDelay(100),
-        abortableDelay(150),
-        abortableDelay(200),
-    ]
+      abortableDelay(100),
+      abortableDelay(150),
+      abortableDelay(200),
+    ];
 
     const startTime = Date.now();
     await Promise.all(promise);
@@ -161,17 +159,47 @@ describe("Concurrency and multiple calls", () => {
   it("should handle multiple delays with same abort signal", async () => {
     const controller = new AbortController();
     const promises = [
-        abortableDelay(1000, controller.signal),
-        abortableDelay(1500, controller.signal),
-        abortableDelay(2000, controller.signal),
-    ]
+      abortableDelay(1000, controller.signal),
+      abortableDelay(1500, controller.signal),
+      abortableDelay(2000, controller.signal),
+    ];
 
     setTimeout(() => controller.abort("Abort all"), 100);
 
     const result = await Promise.allSettled(promises);
-    result.forEach(res => {
-        expect(res.status).toBe("rejected");
-        expect((res as PromiseRejectedResult).reason).toBe("Abort all");
-    })
-  })
+    result.forEach((res) => {
+      expect(res.status).toBe("rejected");
+      expect((res as PromiseRejectedResult).reason).toBe("Abort all");
+    });
+  });
+});
+
+describe("performance testing", () => {
+  it("should not leak memory with many operations", async () => {
+    // Forced garbage collection (requires the --expose-gc flag)
+    if (global.gc) {
+      global.gc();
+    }
+
+    const initialMemory = process.memoryUsage().heapUsed;
+    // perform a large number of operations
+    for (let round = 0; round < 10; round++) {
+      const promises: Promise<void>[] = [];
+      for (let i = 0; i < 100; i++) {
+        promises.push(abortableDelay(1));
+      }
+      await Promise.all(promises);
+    }
+
+    // forced garbage collection
+    if (global.gc) {
+      global.gc();
+    }
+
+    const finalMemory = process.memoryUsage().heapUsed;
+    const memoryGrowth = finalMemory - initialMemory;
+
+    // memory growth should be within a reasonable range (e.g., less than 1MB)
+    expect(memoryGrowth).toBeLessThan(1024 * 1024);
+  });
 });
