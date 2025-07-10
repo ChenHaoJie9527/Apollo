@@ -235,3 +235,35 @@ describe("type safety", () => {
     await expect(promise2).rejects.toBe(errorReason);
   });
 });
+
+describe("Practical application scenarios", () => {
+  it("should work in retry logic simulation", async () => {
+    let attemptCount = 0;
+    const maxAttempts = 3;
+    const retryDelay = 1000;
+
+    const simulateRetryLogic = async () => {
+      const controller = new AbortController();
+
+      for (let i = 0; i < maxAttempts; i++) {
+        attemptCount++;
+
+        try {
+          // Failure to simulate an operation
+          throw new Error("Operation failed");
+        } catch (error) {
+          if (i < maxAttempts - 1) {
+            // retry delay
+            console.log(`Attempt ${i + 1} failed, retrying...`);
+            await abortableDelay(retryDelay, controller.signal);
+          } else {
+            throw error;
+          }
+        }
+      }
+    };
+
+    await expect(simulateRetryLogic()).rejects.toThrow("Operation failed");
+    expect(attemptCount).toBe(maxAttempts);
+  });
+});
