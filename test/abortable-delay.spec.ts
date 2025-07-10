@@ -57,4 +57,14 @@ describe("interrupt function", () => {
 
         await expect(promise).rejects.toBeInstanceOf(DOMException)
     })
+
+    it("should reject with custom error object", async () => {
+        const controller = new AbortController();
+        const customError = new Error("Custom abort error");
+        const promise = abortableDelay(1000, controller.signal);
+
+        setTimeout(() => controller.abort(customError), 500);
+
+        await expect(promise).rejects.toThrow(customError)
+    })
 })
