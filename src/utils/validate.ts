@@ -7,9 +7,9 @@ export const validate = async <T extends StandardSchemaV1>(
 ): Promise<StandardSchemaV1.InferOutput<T>> => {
   const result = await schema["~standard"].validate(data);
 
-  if (result.issues) {
-    throw new ValidationError(result, data)
+  if (result.issues && result.issues.length > 0) {
+    throw new ValidationError(result as StandardSchemaV1.FailureResult, data)
   }
 
-  return result.value;
+  return (result as StandardSchemaV1.SuccessResult<StandardSchemaV1.InferOutput<T>>).value;
 };
