@@ -7,6 +7,7 @@
 		"forceConsistentCasingInFileNames": true,
 		"inlineSources": true,
 		"isolatedModules": false,
+		"jsx": "react-jsx",
 		"module": "ES2020",
 		"moduleDetection": "force",
 		"moduleResolution": "Bundler",
@@ -28,5 +29,5 @@
 		"verbatimModuleSyntax": true
 	},
 	"include": ["src", "vitest.config.ts", "tsup.config.ts", "tsconfig.json"],
-	"exclude": ["./dist"]
+	"exclude": ["./dist", "src/hook"]
 }
