@@ -17,9 +17,9 @@ import {
   withTimeout,
   toStreamable,
   abortableDelay,
-  validate
+  validate,
+  createRequest
 } from "./utils";
-import { resolveUrl } from "./utils/resolve-url";
 
 const emptyOptions = {} as any;
 
@@ -89,21 +89,7 @@ export const apollo = <
         finalOptions.timeout
       );
 
-      request = await toStreamable(
-        new Request(
-          input?.url
-            ? input // Request
-            : resolveUrl(
-                finalOptions.baseUrl,
-                input as unknown as string | URL,
-                defaultOptions.params,
-                fetchOpts.params,
-                finalOptions.serializeParams
-              ),
-          finalOptions as any
-        ),
-        finalOptions.onRequestStreaming
-      );
+      request = await createRequest(input, finalOptions, defaultOptions, fetchOpts);
 
       finalOptions.onRequest?.(request);
 
