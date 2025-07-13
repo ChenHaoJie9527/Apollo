@@ -18,6 +18,7 @@ import {
   toStreamable,
   abortableDelay,
   validate,
+  executeWithRetry,
 } from "./utils";
 import { createRequest, executeRequest, getRetryConfigValue } from "./helps";
 
@@ -75,67 +76,19 @@ export const apollo = <
 
     finalOptions.headers = currentHeaders;
 
-    // Retry counter: used to determine if the maximum number of retries has been exceeded
-    let attempt = 0;
-    // Request object reference: stores the Request object, used in retry logic and callback functions
+
     let request: Request;
-    // Tracking retry results: stores retry results, possibly containing response or error
-    const outcome = {} as DistributiveOmit<RetryContext, "request">;
-    do {
-      // per-try timeout
-      // Retry counter: used to determine if the maximum number of retries has been exceeded
-      finalOptions.signal = withTimeout(
-        finalOptions.signal,
-        finalOptions.timeout
-      );
+    const outcome = await executeWithRetry(
+      input,
+      finalOptions,
+      defaultOptions,
+      fetchOpts,
+      ctx,
+      _fetch
+    );
 
-      request = await createRequest(input, finalOptions, defaultOptions, fetchOpts);
-
-      finalOptions.onRequest?.(request);
-
-      try {
-        outcome.response = await toStreamable(
-          await _fetch(
-            request,
-            // do not override the request body & patch headers again
-            // body and headers are already set in the new request
-            { ...finalOptions, body: undefined, headers: request.headers },
-            ctx
-          ),
-          // Download progress callback function
-          finalOptions.onResponseStreaming
-        );
-      } catch (e: any) {
-        outcome.error = e;
-      }
-
-      // Get the retry configuration and make sure there are default values
-      const retryConfig = finalOptions.retry || {
-        attempts: 0,
-        delay: 0,
-        when: () => false,
-      };
-
-      // There are two conditions for deciding whether or not to exit the retry loop
-      if (
-        !(await retryConfig.when({ request, ...outcome })) ||
-        ++attempt >
-          (typeof retryConfig.attempts === "function"
-            ? await retryConfig.attempts(request)
-            : retryConfig.attempts)
-      )
-        break;
-
-      await abortableDelay(
-        typeof retryConfig.delay === "function"
-          ? await retryConfig.delay({ attempt, request, ...outcome })
-          : retryConfig.delay,
-        finalOptions.signal
-      );
-
-      finalOptions.onRetry?.({ attempt, request, ...outcome });
-      // biome-ignore lint/correctness/noConstantCondition: <explanation>
-    } while (true);
+    // 从 outcome 中提取 request 对象
+    request = outcome.request;
 
     // Handle the final result
     if (outcome.error) {
