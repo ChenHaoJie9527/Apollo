@@ -18,7 +18,8 @@ import {
   toStreamable,
   abortableDelay,
   validate,
-  createRequest
+  createRequest,
+  executeRequest
 } from "./utils";
 
 const emptyOptions = {} as any;
