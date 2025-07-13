@@ -1,5 +1,5 @@
-import { resolveUrl } from "./resolve-url";
-import { toStreamable } from "./to-streamable";
+import { resolveUrl } from "../utils/resolve-url";
+import { toStreamable } from "../utils/to-streamable";
 
 export const createRequest = async (
   input: any,

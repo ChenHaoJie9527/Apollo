@@ -1,5 +1,5 @@
 import type { MinFetchFn } from "src/types";
-import { toStreamable } from "./to-streamable";
+import { toStreamable } from "../utils/to-streamable";
 
 /**
  * Helper function: performs a single request

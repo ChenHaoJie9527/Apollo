@@ -18,9 +18,8 @@ import {
   toStreamable,
   abortableDelay,
   validate,
-  createRequest,
-  executeRequest
 } from "./utils";
+import { createRequest, executeRequest, getRetryConfigValue } from "./helps";
 
 const emptyOptions = {} as any;
 
