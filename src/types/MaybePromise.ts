@@ -1,5 +1,5 @@
 /**
- * MaybePromise 是工具类型，用于处理可能的Promise
- * T：响应数据类型
+ * MaybePromise is a tool type used to handle possible Promise
+ * T: response data type
  */
 export type MaybePromise<T> = T | Promise<T>;

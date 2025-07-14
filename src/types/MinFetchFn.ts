@@ -1,9 +1,9 @@
 /**
- * 定义基本Fetch函数类型
- * @param input 请求地址
- * @param options 请求选项
- * @param ctx 请求上下文
- * @returns 响应Promise
+ * Define the basic Fetch function type
+ * @param input request address
+ * @param options request options
+ * @param ctx request context
+ * @returns response Promise
  */
 export type MinFetchFn = (
 	input: Request,

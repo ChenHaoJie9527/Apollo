@@ -4,7 +4,7 @@ import type { MinFetchFn } from "./MinFetchFn";
 export type GetDefaultParsedData<TDefaultOptions> =
 	TDefaultOptions extends DefaultOptions<MinFetchFn, infer U, any> ? U : never;
 
-// 示例：
+// Example:
 // type MyOptions = DefaultOptions<MinFetchFn, {
 //     id: number;
 //     name: string;

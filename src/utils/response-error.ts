@@ -1,8 +1,8 @@
 /**
- * 响应错误类
- * 1. 继承自 Error 类
- * 2. 包含请求、响应、状态码、数据等属性
- * 3. 包含一个静态方法 isResponseError 用于检查错误是否是 ResponseError 类型
+ * Response error class
+ * 1. Inherits from the Error class
+ * 2. Contains request, response, status code, data, etc. properties
+ * 3. Contains a static method isResponseError to check if the error is of type ResponseError
  */
 export class ResponseError<T = any> extends Error {
   readonly request: Request;
@@ -12,9 +12,9 @@ export class ResponseError<T = any> extends Error {
   override name: "ResponseError";
 
   constructor(response: Response, data: T, request: Request) {
-    // 调用父类构造函数，设置错误消息
-    // 由于Error 接受一个可选的message参数
-    // 格式化错误消息，包含状态码和状态文本
+    // Call the parent class constructor, set the error message
+    // Since Error accepts an optional message parameter
+    // Format the error message, including the status code and status text
     super(`[${response.status}] ${response.statusText}`);
     this.data = data;
     this.name = "ResponseError";
@@ -25,9 +25,9 @@ export class ResponseError<T = any> extends Error {
 }
 
 /**
- * 检查错误是否是 ResponseError 类型
- * @param error 错误对象
- * @returns 是否是 ResponseError 类型
+ * Check if the error is of type ResponseError
+ * @param error error object
+ * @returns whether the error is of type ResponseError
  */
 export const isResponseError = <T = any>(
   error: unknown

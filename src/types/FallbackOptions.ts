@@ -7,16 +7,16 @@ import type { SerializeBody } from "./SerializeBody";
 import type { SerializeParams } from "./SerializeParams";
 
 /**
- * 定义 fallback 选项
- * 1. parseRejected: 解析拒绝响应的函数
- * 2. parseResponse: 解析响应的函数
- * 3. reject: 拒绝请求的函数
- * 4. retry: 重试选项
- * 5. serializeParams: 序列化参数的函数
- * 6. serializeBody: 序列化请求体的函数
+ * Define fallback options
+ * 1. parseRejected: function to parse rejected responses
+ * 2. parseResponse: function to parse responses
+ * 3. reject: function to reject requests
+ * 4. retry: retry options
+ * 5. serializeParams: function to serialize parameters
+ * 6. serializeBody: function to serialize request bodies
  */
 export type FallbackOptions = {
-  parseRejected: ParseRejected; // 解析拒绝响应的函数
+  parseRejected: ParseRejected; // function to parse rejected responses
   parseResponse: ParseResponse<any>;
   reject: (response: Response) => MaybePromise<boolean>;
   retry: Required<RetryOptions>;

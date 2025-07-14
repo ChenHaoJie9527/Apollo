@@ -1,5 +1,5 @@
 /**
- * SerializeBody 是工具类型，用于序列化请求体
- * T：请求体类型
+ * SerializeBody is a tool type used to serialize the request body
+ * T: request body type
  */
 export type SerializeBody<T> = (body: T) => BodyInit | null | undefined;

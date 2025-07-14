@@ -3,14 +3,14 @@ import type { DefaultRawBody } from "./DefaultRawBody";
 import type { MinFetchFn } from "./MinFetchFn";
 
 /**
- * 辅助类型，判断是否为null
- * 问题：为什么使用元祖包装
- * 回答：因为unknown类型无法直接判断是否为null，所以需要使用元祖包装
- * 问题：使用元祖包装后，发生什么变化
- * 回答：使用元祖包装后，可以判断是否为null，因为null类型可以被赋值给元祖类型
+ * Helper type, determine if it is null
+ * Question: Why use tuple packaging
+ * Answer: Because the unknown type cannot be directly determined to be null, so it needs to be packaged with a tuple
+ * Question: What happens after using tuple packaging
+ * Answer: After using tuple packaging, it can be determined whether it is null, because the null type can be assigned to the tuple type
  */
 type IsNull<T> = [T] extends [null] ? true : false;
-// 示例：
+// Example:
 // type IsNull1 = IsNull<null> // true
 // type IsNull2 = IsNull<undefined> // false
 // type IsNull3 = IsNull<string> // false
@@ -33,8 +33,8 @@ type IsNull<T> = [T] extends [null] ? true : false;
 // type IsNull20 = IsNull<string | null | undefined | number | boolean | object | symbol> // false
 
 /**
- * 辅助类型，判断是否为unknown
- * 但排除 null 类型 因为 null 类型可以被赋值给任何类型 null extends unknown 为真
+ * Helper type, determine if it is unknown
+ * But exclude null type because null type can be assigned to any type null extends unknown is true
  */
 type IsUnknown<T> = unknown extends T
 	? IsNull<T> extends false

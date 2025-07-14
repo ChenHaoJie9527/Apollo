@@ -3,21 +3,21 @@ import { ResponseError } from "./response-error";
 import { isJsonifiable } from "./isJsonifiable";
 
 /**
- * 默认的 fallback 选项
- * 1. parseResponse: 解析响应的函数
- * 2. parseRejected: 解析拒绝响应的函数
- * 3. serializeParams: 序列化参数的函数
- * 4. serializeBody: 序列化请求体的函数
- * 5. reject: 拒绝请求的函数
- * 6. retry: 重试选项
+ * Default fallback options
+ * 1. parseResponse: function to parse responses
+ * 2. parseRejected: function to parse rejected responses
+ * 3. serializeParams: function to serialize parameters
+ * 4. serializeBody: function to serialize request bodies
+ * 5. reject: function to reject requests
+ * 6. retry: retry options
  */
 export const fallbackOptions: FallbackOptions = {
   /**
-   * 解析响应的函数
-   * 1. 克隆响应
-   * 2. 尝试解析为JSON
-   * 3. 如果失败，则尝试解析为文本
-   * 4. 返回解析后的数据
+   * Function to parse responses
+   * 1. Clone the response
+   * 2. Try to parse as JSON
+   * 3. If failed, try to parse as text
+   * 4. Return the parsed data
    */
   parseResponse: (response) => {
     const result = response
@@ -28,9 +28,9 @@ export const fallbackOptions: FallbackOptions = {
     return result;
   },
   /**
-   * 解析拒绝响应的函数
-   * 1. 创建一个 ResponseError 实例
-   * 2. 返回 ResponseError 实例
+   * Function to parse rejected responses
+   * 1. Create a ResponseError instance
+   * 2. Return the ResponseError instance
    */
   parseRejected: async (response, request) => {
     const result = new ResponseError(
@@ -41,9 +41,9 @@ export const fallbackOptions: FallbackOptions = {
     return result;
   },
   /**
-   * 序列化参数的函数
-   * 1. 将参数转换为URLSearchParams
-   * 2. 返回URLSearchParams的字符串表示
+   * Function to serialize parameters
+   * 1. Convert parameters to URLSearchParams
+   * 2. Return the string representation of URLSearchParams
    */
   serializeParams: (params) => {
     const stringified = Object.fromEntries(
@@ -60,17 +60,17 @@ export const fallbackOptions: FallbackOptions = {
     return result;
   },
   /**
-   * 序列化请求体的函数
-   * 1. 如果请求体是可序列化的，则返回JSON字符串
-   * 2. 否则返回原始请求体
+   * Function to serialize request bodies
+   * 1. If the request body is serializable, return the JSON string
+   * 2. Otherwise, return the original request body
    */
   serializeBody: (body: any) => {
     return isJsonifiable(body) ? JSON.stringify(body) : body;
   },
   /**
-   * 拒绝请求的函数
-   * 1. 如果响应状态码不是200-299，则返回true
-   * 2. 否则返回false
+   * Function to reject requests
+   * 1. If the response status code is not 200-299, return true
+   * 2. Otherwise, return false
    */
   reject: (response) => {
     return !response.ok;
@@ -83,9 +83,9 @@ export const fallbackOptions: FallbackOptions = {
 };
 
 /**
- * 解析响应数据的函数
- * 1. 调用 parseResponse 函数
- * 2. 返回解析后的数据
+ * Function to parse response data
+ * 1. Call the parseResponse function
+ * 2. Return the parsed data
  */
 async function parseResponseData(response: Response, request: Request) {
   return fallbackOptions.parseResponse(response, request);
