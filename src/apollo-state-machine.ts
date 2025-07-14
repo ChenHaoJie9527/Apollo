@@ -55,6 +55,7 @@ export const apolloStateMachine = <
 
     // 2. Body serialization phase (same as original)
     const currentBody = (finalOptions as any).body;
+    // Whether the body was serialized
     let wasBodySerialized = false;
 
     if (

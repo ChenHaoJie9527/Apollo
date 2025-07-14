@@ -396,6 +396,10 @@ export class RequestStateMachine {
     );
   }
 
+  /**
+   * @description Execute the state machine
+   * @returns result or throw error
+   */
   async execute(): Promise<any> {
     // Define terminal states: 1. Request success, 2. Request failed, 3. Parse error, 4. Validation error
     const terminalStates = new Set([

@@ -39,6 +39,7 @@ describe("apolloStateMachine", () => {
   it("should handle request with retry", async () => {
     const mockData = { id: 1, title: "Test Post" };
     let attemptCount = 0;
+    let retryCallbackCalled = false;
     
     server.use(
       http.get(testURL, () => {
@@ -50,17 +51,24 @@ describe("apolloStateMachine", () => {
       })
     );
 
-    const api = apolloStateMachine(fetch);
-    const result = await api(testURL, {
+    const getDefaultOptions = () => ({
       retry: {
         attempts: 2,
         delay: 10,
-        when: ({ error }) => !!error,
+        when: ({ error }: any) => !!error,
+      },
+    });
+
+    const api = apolloStateMachine(fetch, getDefaultOptions);
+    const result = await api(testURL, {
+      onRetry: ({ error, response, request, attempt }: any) => {
+        retryCallbackCalled = true;
       },
     });
 
     expect(result).toEqual(mockData);
     expect(attemptCount).toBe(2);
+    expect(retryCallbackCalled).toBe(true);
   });
 
   it("should handle request failure after max retries", async () => {
@@ -73,15 +81,17 @@ describe("apolloStateMachine", () => {
       })
     );
 
-    const api = apolloStateMachine(fetch);
-    
-    await expect(api(testURL, {
+    const getDefaultOptions = () => ({
       retry: {
         attempts: 2,
         delay: 10,
-        when: ({ error }) => !!error,
+        when: ({ error }: any) => !!error,
       },
-    })).rejects.toThrow();
+    });
+
+    const api = apolloStateMachine(fetch, getDefaultOptions);
+    
+    await expect(api(testURL, {})).rejects.toThrow();
 
     expect(attemptCount).toBe(3); // 1 initial + 2 retries
   });
@@ -95,9 +105,8 @@ describe("apolloStateMachine", () => {
 
     const api = apolloStateMachine(fetch);
     
-    await expect(api(testURL, {
-      reject: (response) => !response.ok,
-    })).rejects.toThrow();
+    // 默认情况下，非2xx响应会被拒绝
+    await expect(api(testURL, {})).rejects.toThrow();
   });
 
   it("should handle schema validation", async () => {
@@ -111,7 +120,7 @@ describe("apolloStateMachine", () => {
 
     const mockSchema = {
       "~standard": {
-        version: 1,
+        version: 1 as const,
         vendor: "test",
         validate: (data: any) => Promise.resolve({
           value: { ...data, validated: true },
@@ -139,7 +148,7 @@ describe("apolloStateMachine", () => {
 
     const mockSchema = {
       "~standard": {
-        version: 1,
+        version: 1 as const,
         vendor: "test",
         validate: (data: any) => Promise.resolve({
           value: undefined,
