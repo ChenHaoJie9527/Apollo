@@ -1,5 +1,7 @@
 import { resolveUrl } from "../utils/resolve-url";
 import { toStreamable } from "../utils/to-streamable";
+import type { MergedOptions } from "src/utils";
+import type { DefaultOptions, FetcherOptions, MinFetchFn } from "src/types";
 
 /**
  * Helper function: creates a request
@@ -11,9 +13,9 @@ import { toStreamable } from "../utils/to-streamable";
  */
 export const createRequest = async (
   input: any,
-  finalOptions: any,
-  defaultOptions: any,
-  fetchOpts: any
+  finalOptions: MergedOptions,
+  defaultOptions: DefaultOptions<MinFetchFn, any, any>,
+  fetchOpts: FetcherOptions<MinFetchFn, any, any, any>
 ): Promise<Request> => {
   const url = input?.url
     ? input

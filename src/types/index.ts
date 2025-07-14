@@ -5,6 +5,8 @@ import type { FallbackOptions } from "./FallbackOptions";
 import type { FetcherOptions } from "./FetcherOptions";
 import type { MaybePromise } from "./MaybePromise";
 import type { MinFetchFn } from "./MinFetchFn";
+import type { RequestContext } from "./RequestContext";
+import type { HeadersObject } from "./HeadersObject";
 
 export type {
   MinFetchFn,
@@ -14,4 +16,6 @@ export type {
   FetcherOptions,
   Apollo,
   FallbackOptions,
+  RequestContext,
+  HeadersObject,
 };

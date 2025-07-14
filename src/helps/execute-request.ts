@@ -1,5 +1,6 @@
 import type { MinFetchFn } from "src/types";
 import { toStreamable } from "../utils/to-streamable";
+import type { MergedOptions } from "src/utils";
 
 /**
  * Helper function: performs a single request
@@ -11,7 +12,7 @@ import { toStreamable } from "../utils/to-streamable";
  */
 export const executeRequest = async (
   request: Request,
-  finalOptions: any,
+  finalOptions: MergedOptions,
   ctx: any,
   _fetch: MinFetchFn
 ) => {

@@ -5,7 +5,6 @@
  */
 export const abortableDelay = (delay: number, signal?: AbortSignal) =>
   new Promise<void>((resolve, reject) => {
-
     // If the signal is already aborted, reject immediately
     if (signal?.aborted) {
       reject(signal.reason);

@@ -6,21 +6,15 @@ import type {
   MaybePromise,
   MinFetchFn,
 } from "./types";
-import type { DistributiveOmit } from "./types/DistributiveOmit";
-import type { RetryContext } from "./types/RetryOptions";
 import {
   fallbackOptions,
   mergeEventHandlers,
   mergeOptions,
   isJsonifiable,
   mergeHeaders,
-  withTimeout,
-  toStreamable,
-  abortableDelay,
   validate,
   executeWithRetry,
 } from "./utils";
-import { createRequest, executeRequest, getRetryConfigValue } from "./helps";
 
 const emptyOptions = {} as any;
 

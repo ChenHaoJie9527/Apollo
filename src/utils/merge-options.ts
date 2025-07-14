@@ -4,11 +4,24 @@ export function mergeOptions<T1, T2, T3, T4>(
   opt3: T3,
   opt4: T4
 ) {
+  // Filter out event handlers to avoid duplicate processing
+  const filterEventHandlers = (obj: any) => {
+    if (!obj || typeof obj !== 'object') return obj;
+    
+    const filtered: any = {};
+    for (const key in obj) {
+      if (!/^on[A-Z]/.test(key)) {
+        filtered[key] = obj[key];
+      }
+    }
+    return filtered;
+  };
+
   const merged = {
-    ...opt1,
-    ...opt2,
-    ...opt3,
-    ...opt4,
+    ...filterEventHandlers(opt1),
+    ...filterEventHandlers(opt2),
+    ...filterEventHandlers(opt3),
+    ...filterEventHandlers(opt4),
   };
 
   const retryOptions = {
