@@ -2,18 +2,18 @@ import type { DistributiveOmit } from "src/types/DistributiveOmit";
 
 // Simplified omit function - both simple and type hinting
 export function omit<O extends object, K extends keyof O>(
-  obj: O,
-  keys: K[] | readonly K[] = []
+	obj: O,
+	keys: K[] | readonly K[] = [],
 ): DistributiveOmit<O, K> {
-  if (!obj) return {} as any;
-  
-  const copy = { ...obj } as any;
-  for (const key of keys) {
-    if (key in copy) {
-      delete copy[key];
-    }
-  }
-  return copy;
+	if (!obj) return {} as any;
+
+	const copy = { ...obj } as any;
+	for (const key of keys) {
+		if (key in copy) {
+			delete copy[key];
+		}
+	}
+	return copy;
 }
 
 // ========== Unit Testing ==========

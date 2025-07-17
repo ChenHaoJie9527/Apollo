@@ -1,6 +1,6 @@
+import type { RetryOptions } from "src/types/RetryOptions";
 import { abortableDelay } from "src/utils";
 import { getRetryConfigValue } from "./get-retry-config-value";
-import type { RetryOptions } from "src/types/RetryOptions";
 
 /**
  * Helper function: executes the retry delay
@@ -9,10 +9,10 @@ import type { RetryOptions } from "src/types/RetryOptions";
  * @param signal - The abort signal
  */
 export const executeRetryDelay = async (
-  retryConfig: RetryOptions,
-  context: any,
-  signal?: AbortSignal
+	retryConfig: RetryOptions,
+	context: any,
+	signal?: AbortSignal,
 ): Promise<void> => {
-  const delay = await getRetryConfigValue(retryConfig.delay, context);
-  await abortableDelay(delay, signal);
+	const delay = await getRetryConfigValue(retryConfig.delay, context);
+	await abortableDelay(delay, signal);
 };

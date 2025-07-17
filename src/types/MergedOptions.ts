@@ -9,10 +9,10 @@ import type { MinFetchFn } from "./MinFetchFn";
  * This is the intersection of DefaultOptions and FetcherOptions, containing runtime-added properties
  */
 export type MergedOptions = DefaultOptions<MinFetchFn, any, any> &
-  Partial<FetcherOptions<MinFetchFn, any, any, any>> & {
-    // Runtime-added properties
-    signal?: AbortSignal;
-    headers?: HeadersInit | HeadersObject;
-    reject?: (response: Response) => MaybePromise<boolean>;
-    [key: string]: any;
-  };
+	Partial<FetcherOptions<MinFetchFn, any, any, any>> & {
+		// Runtime-added properties
+		signal?: AbortSignal;
+		headers?: HeadersInit | HeadersObject;
+		reject?: (response: Response) => MaybePromise<boolean>;
+		[key: string]: any;
+	};

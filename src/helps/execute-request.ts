@@ -1,6 +1,6 @@
 import type { MinFetchFn } from "src/types";
-import { toStreamable } from "../utils/to-streamable";
 import type { MergedOptions } from "src/utils";
+import { toStreamable } from "../utils/to-streamable";
 
 /**
  * Helper function: performs a single request
@@ -11,33 +11,33 @@ import type { MergedOptions } from "src/utils";
  * @returns The response or error
  */
 export const executeRequest = async (
-  request: Request,
-  finalOptions: MergedOptions,
-  ctx: any,
-  _fetch: MinFetchFn
+	request: Request,
+	finalOptions: MergedOptions,
+	ctx: any,
+	_fetch: MinFetchFn,
 ) => {
-  try {
-    const response = await toStreamable(
-      await _fetch(
-        request,
-        // do not override the request body & patch headers again
-        // body and headers are already set in the new request
-        {
-          ...finalOptions,
-          body: undefined,
-          headers: request.headers,
-        },
-        ctx
-      ),
-      // Download progress callback function
-      finalOptions.onResponseStreaming
-    );
-    return {
-      response,
-    };
-  } catch (error: any) {
-    return {
-      error,
-    };
-  }
+	try {
+		const response = await toStreamable(
+			await _fetch(
+				request,
+				// do not override the request body & patch headers again
+				// body and headers are already set in the new request
+				{
+					...finalOptions,
+					body: undefined,
+					headers: request.headers,
+				},
+				ctx,
+			),
+			// Download progress callback function
+			finalOptions.onResponseStreaming,
+		);
+		return {
+			response,
+		};
+	} catch (error: any) {
+		return {
+			error,
+		};
+	}
 };

@@ -5,23 +5,23 @@
  * 3. Contains a static method isResponseError to check if the error is of type ResponseError
  */
 export class ResponseError<T = any> extends Error {
-  readonly request: Request;
-  readonly status: number;
-  readonly data: T;
-  readonly response: Response;
-  override name: "ResponseError";
+	readonly request: Request;
+	readonly status: number;
+	readonly data: T;
+	readonly response: Response;
+	override name: "ResponseError";
 
-  constructor(response: Response, data: T, request: Request) {
-    // Call the parent class constructor, set the error message
-    // Since Error accepts an optional message parameter
-    // Format the error message, including the status code and status text
-    super(`[${response.status}] ${response.statusText}`);
-    this.data = data;
-    this.name = "ResponseError";
-    this.response = response;
-    this.request = request;
-    this.status = response.status;
-  }
+	constructor(response: Response, data: T, request: Request) {
+		// Call the parent class constructor, set the error message
+		// Since Error accepts an optional message parameter
+		// Format the error message, including the status code and status text
+		super(`[${response.status}] ${response.statusText}`);
+		this.data = data;
+		this.name = "ResponseError";
+		this.response = response;
+		this.request = request;
+		this.status = response.status;
+	}
 }
 
 /**
@@ -30,7 +30,7 @@ export class ResponseError<T = any> extends Error {
  * @returns whether the error is of type ResponseError
  */
 export const isResponseError = <T = any>(
-  error: unknown
+	error: unknown,
 ): error is ResponseError<T> => {
-  return error instanceof ResponseError;
+	return error instanceof ResponseError;
 };

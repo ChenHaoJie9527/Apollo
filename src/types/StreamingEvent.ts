@@ -5,7 +5,7 @@
  * 3. transferredBytes: number of bytes transferred
  */
 export type StreamingEvent = {
-  chunk: Uint8Array;
-  totalBytes: number;
-  transferredBytes: number;
+	chunk: Uint8Array;
+	totalBytes: number;
+	transferredBytes: number;
 };

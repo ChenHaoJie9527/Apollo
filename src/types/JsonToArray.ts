@@ -10,9 +10,9 @@ import type { JsonToObject } from "./JsonToObject";
  * 5. Use ReadonlyArray type, representing the array element type, which can be JsonPrimitive | JsonToObject | JsonToArray type
  */
 export type JsonToArray = Array<
-  | JsonPrimitive
-  | JsonToObject
-  | Array<any>
-  | ReadonlyArray<any>
-  | ReadonlyArray<JsonPrimitive | JsonToObject | JsonToArray>
+	| JsonPrimitive
+	| JsonToObject
+	| Array<any>
+	| ReadonlyArray<any>
+	| ReadonlyArray<JsonPrimitive | JsonToObject | JsonToArray>
 >;

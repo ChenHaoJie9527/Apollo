@@ -16,10 +16,10 @@ import type { SerializeParams } from "./SerializeParams";
  * 6. serializeBody: function to serialize request bodies
  */
 export type FallbackOptions = {
-  parseRejected: ParseRejected; // function to parse rejected responses
-  parseResponse: ParseResponse<any>;
-  reject: (response: Response) => MaybePromise<boolean>;
-  retry: Required<RetryOptions>;
-  serializeParams: SerializeParams;
-  serializeBody: SerializeBody<DefaultRawBody>;
+	parseRejected: ParseRejected; // function to parse rejected responses
+	parseResponse: ParseResponse<any>;
+	reject: (response: Response) => MaybePromise<boolean>;
+	retry: Required<RetryOptions>;
+	serializeParams: SerializeParams;
+	serializeBody: SerializeBody<DefaultRawBody>;
 };

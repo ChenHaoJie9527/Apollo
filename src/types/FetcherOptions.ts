@@ -3,10 +3,10 @@ import type { BaseOptions } from "./BaseOptions";
 import type { HeadersObject } from "./HeadersObject";
 import type { Method } from "./Method";
 import type { MinFetchFn } from "./MinFetchFn";
-import type { ParseResponse } from "./ParseResponse";
-import type { SerializeBody } from "./SerializeBody";
 import type { OnRetry } from "./OnRetry";
 import type { ParseRejected } from "./ParseRejected";
+import type { ParseResponse } from "./ParseResponse";
+import type { SerializeBody } from "./SerializeBody";
 import type { StreamingEvent } from "./StreamingEvent";
 
 /**
@@ -18,26 +18,26 @@ import type { StreamingEvent } from "./StreamingEvent";
  * & {}: used to add an empty object type, indicating that the remaining type must be an object
  */
 export type FetcherOptions<
-  T extends MinFetchFn,
-  TSchema extends StandardSchemaV1,
-  TParsedData,
-  TRawBody
+	T extends MinFetchFn,
+	TSchema extends StandardSchemaV1,
+	TParsedData,
+	TRawBody,
 > = BaseOptions<T> & {
-  baseUrl?: string;
-  body?: NoInfer<TRawBody> | undefined | null;
-  headers?: HeadersInit | HeadersObject;
-  method?: Method;
-  params?: Record<string, any>;
-  schema?: TSchema;
-  parseRejected?: ParseRejected
-  parseResponse?: ParseResponse<TParsedData>;
-  serializeBody?: SerializeBody<TRawBody>;
-  signal?: AbortSignal;
-  timeout?: number;
-  onRequest?: (request: Request) => void;
-  onError?: (error: {}, request: Request) => void;
-  onRetry?: OnRetry;
-  onSuccess?: (data: any, request: Request) => void;
-  onRequestStreaming?: (event: StreamingEvent, request: Request) => void;
-  onResponseStreaming?: (event: StreamingEvent, response: Response) => void;
+	baseUrl?: string;
+	body?: NoInfer<TRawBody> | undefined | null;
+	headers?: HeadersInit | HeadersObject;
+	method?: Method;
+	params?: Record<string, any>;
+	schema?: TSchema;
+	parseRejected?: ParseRejected;
+	parseResponse?: ParseResponse<TParsedData>;
+	serializeBody?: SerializeBody<TRawBody>;
+	signal?: AbortSignal;
+	timeout?: number;
+	onRequest?: (request: Request) => void;
+	onError?: (error: {}, request: Request) => void;
+	onRetry?: OnRetry;
+	onSuccess?: (data: any, request: Request) => void;
+	onRequestStreaming?: (event: StreamingEvent, request: Request) => void;
+	onResponseStreaming?: (event: StreamingEvent, response: Response) => void;
 } & {};

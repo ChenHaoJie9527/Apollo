@@ -1,13 +1,6 @@
 {
-    "$schema": "https://unpkg.com/knip@5/schema.json",
-    "ignore": [
-        "**/*.spec.ts",
-        "**/*.spec-d.ts"
-    ],
-    "entry": [
-        "src/apollo.ts"
-    ],
-    "project": [
-        "src/**"
-    ]
+	"$schema": "https://unpkg.com/knip@5/schema.json",
+	"ignore": ["**/*.spec.ts", "**/*.spec-d.ts"],
+	"entry": ["src/apollo.ts"],
+	"project": ["src/**"]
 }

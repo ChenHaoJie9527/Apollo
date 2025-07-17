@@ -2,11 +2,11 @@ import type { BaseOptions } from "./BaseOptions";
 import type { HeadersObject } from "./HeadersObject";
 import type { Method } from "./Method";
 import type { MinFetchFn } from "./MinFetchFn";
-import type { ParseResponse } from "./ParseResponse";
-import type { SerializeBody } from "./SerializeBody";
-import type { RetryOptions } from "./RetryOptions";
 import type { OnRetry } from "./OnRetry";
 import type { ParseRejected } from "./ParseRejected";
+import type { ParseResponse } from "./ParseResponse";
+import type { RetryOptions } from "./RetryOptions";
+import type { SerializeBody } from "./SerializeBody";
 import type { StreamingEvent } from "./StreamingEvent";
 
 /**
@@ -25,24 +25,24 @@ import type { StreamingEvent } from "./StreamingEvent";
  * @onResponseStreaming: Response streaming callback function, usually some default configurations of response streaming callback functions
  */
 export type DefaultOptions<
-  T extends MinFetchFn,
-  TDefaultParseData,
-  TDefaultRawBody
+	T extends MinFetchFn,
+	TDefaultParseData,
+	TDefaultRawBody,
 > = BaseOptions<T> & {
-  baseUrl?: string;
-  headers?: HeadersInit | HeadersObject; //headerInit: TS built-in type, represents the type of fetch's headers parameter
-  method?: Method;
-  params?: Record<string, any>;
-  parseRejected?: ParseRejected;
-  parseResponse?: ParseResponse<TDefaultParseData>;
-  serializeBody?: SerializeBody<TDefaultRawBody>;
-  retry?: RetryOptions;
-  signal?: AbortSignal;
-  timeout?: number;
-  onRequest?: (request: Request) => void;
-  onError?: (error: {}, request: Request) => void;
-  onRetry?: OnRetry;
-  onSuccess?: (data: any, request: Request) => void;
-  onRequestStreaming?: (event: StreamingEvent, request: Request) => void;
-  onResponseStreaming?: (event: StreamingEvent, response: Response) => void;
+	baseUrl?: string;
+	headers?: HeadersInit | HeadersObject; //headerInit: TS built-in type, represents the type of fetch's headers parameter
+	method?: Method;
+	params?: Record<string, any>;
+	parseRejected?: ParseRejected;
+	parseResponse?: ParseResponse<TDefaultParseData>;
+	serializeBody?: SerializeBody<TDefaultRawBody>;
+	retry?: RetryOptions;
+	signal?: AbortSignal;
+	timeout?: number;
+	onRequest?: (request: Request) => void;
+	onError?: (error: {}, request: Request) => void;
+	onRetry?: OnRetry;
+	onSuccess?: (data: any, request: Request) => void;
+	onRequestStreaming?: (event: StreamingEvent, request: Request) => void;
+	onResponseStreaming?: (event: StreamingEvent, response: Response) => void;
 };
